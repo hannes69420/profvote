@@ -2,12 +2,14 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default function ConfirmedPage({
+type PageSearchParams = Promise<{ status?: string }>;
+
+export default async function ConfirmedPage({
   searchParams,
 }: {
-  searchParams: { status?: string };
+  searchParams: PageSearchParams;
 }) {
-  const status = searchParams.status;
+  const { status } = await searchParams;
   if (status === 'ok') {
     return (
       <div className="container-prose py-24 text-center">

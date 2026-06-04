@@ -7,12 +7,15 @@ import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const revalidate = 300;
 
+type PageParams = Promise<{ uni: string; slug: string }>;
+
 export default async function BewertenPage({
   params,
 }: {
-  params: { uni: string; slug: string };
+  params: PageParams;
 }) {
-  const uni = getUniversity(params.uni);
+  const { uni: uniSlug, slug } = await params;
+  const uni = getUniversity(uniSlug);
   if (!uni) notFound();
   if (!uni.available) {
     return (
@@ -23,7 +26,7 @@ export default async function BewertenPage({
     );
   }
 
-  const prof = await getProfessor(uni.slug as UniversitySlug, params.slug);
+  const prof = await getProfessor(uni.slug as UniversitySlug, slug);
   if (!prof) notFound();
 
   const domains = UNI_CONFIG[uni.slug as UniversitySlug].emailDomains;

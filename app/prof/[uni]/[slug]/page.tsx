@@ -10,14 +10,17 @@ import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const revalidate = 120;
 
+type PageParams = Promise<{ uni: string; slug: string }>;
+
 export async function generateMetadata({
   params,
 }: {
-  params: { uni: string; slug: string };
+  params: PageParams;
 }) {
-  const uni = getUniversity(params.uni);
+  const { uni: uniSlug, slug } = await params;
+  const uni = getUniversity(uniSlug);
   if (!uni) return { title: 'Professor:in nicht gefunden' };
-  const prof = await getProfessor(uni.slug as UniversitySlug, params.slug);
+  const prof = await getProfessor(uni.slug as UniversitySlug, slug);
   if (!prof) return { title: 'Professor:in nicht gefunden' };
   const rating = prof.avgOverall != null ? `⌀ ${prof.avgOverall.toFixed(1)}/5` : 'Noch keine Bewertungen';
   const desc = `${prof.name}${prof.faculty ? ` · ${prof.faculty}` : ''} · ${uni.shortName}. ${rating}${prof.reviewCount ? ` aus ${prof.reviewCount} Bewertungen` : ''}.`;
@@ -31,11 +34,12 @@ export async function generateMetadata({
 export default async function ProfPage({
   params,
 }: {
-  params: { uni: string; slug: string };
+  params: PageParams;
 }) {
-  const uni = getUniversity(params.uni);
+  const { uni: uniSlug, slug } = await params;
+  const uni = getUniversity(uniSlug);
   if (!uni) notFound();
-  const prof = await getProfessor(uni.slug as UniversitySlug, params.slug);
+  const prof = await getProfessor(uni.slug as UniversitySlug, slug);
   if (!prof) notFound();
 
   const reviews = await listReviewsForProfessor(uni.slug as UniversitySlug, prof.id);

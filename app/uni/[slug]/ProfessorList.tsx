@@ -26,7 +26,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
 
   const [q, setQ] = useState(() => params.get('q') ?? '');
   const [faculty, setFaculty] = useState(() => params.get('fac') ?? '');
-  const [sort, setSort] = useState<SortKey>(() => (params.get('sort') as SortKey) || 'name');
+  const [sort, setSort] = useState<SortKey>(() => (params.get('sort') as SortKey) || 'rating');
 
   // Sync state to URL (replace, not push, so back-button feels right)
   const syncUrl = useCallback(
@@ -38,7 +38,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
       };
       setOrDel('q', next.q ?? q);
       setOrDel('fac', next.fac ?? faculty);
-      setOrDel('sort', (next.sort ?? sort) === 'name' ? '' : next.sort ?? sort);
+      setOrDel('sort', (next.sort ?? sort) === 'rating' ? '' : next.sort ?? sort);
       const qs = sp.toString();
       router.replace(qs ? `?${qs}` : '?', { scroll: false });
     },
@@ -149,10 +149,10 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
         <p className="text-sm text-ink-muted">
           {filtered.length} von {professors.length}
         </p>
-        {(q || faculty || sort !== 'name') && (
+        {(q || faculty || sort !== 'rating') && (
           <button
             type="button"
-            onClick={() => { setQ(''); setFaculty(''); setSort('name'); }}
+            onClick={() => { setQ(''); setFaculty(''); setSort('rating'); }}
             className="text-sm text-ink-muted underline-offset-2 hover:text-ink-soft hover:underline"
           >
             Filter zurücksetzen

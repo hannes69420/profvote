@@ -7,8 +7,11 @@ import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const revalidate = 300;
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const uni = getUniversity(params.slug);
+type PageParams = Promise<{ slug: string }>;
+
+export async function generateMetadata({ params }: { params: PageParams }) {
+  const { slug } = await params;
+  const uni = getUniversity(slug);
   if (!uni) return { title: 'Universität nicht gefunden' };
   return {
     title: `${uni.shortName} — Profs bewerten`,
@@ -16,8 +19,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function UniPage({ params }: { params: { slug: string } }) {
-  const uni = getUniversity(params.slug);
+export default async function UniPage({ params }: { params: PageParams }) {
+  const { slug } = await params;
+  const uni = getUniversity(slug);
   if (!uni) notFound();
 
   if (!uni.available) {

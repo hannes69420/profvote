@@ -15,6 +15,8 @@ interface SP {
   b?: string;
 }
 
+type PageSearchParams = Promise<SP>;
+
 function parseRef(s: string | undefined): { uni: UniversitySlug; slug: string } | null {
   if (!s) return null;
   const [uni, slug] = s.split('/');
@@ -33,10 +35,11 @@ async function loadSide(ref: { uni: UniversitySlug; slug: string } | null) {
   return { uni, prof, stats: aggregate(reviews), reviewCount: reviews.length };
 }
 
-export default async function ComparePage({ searchParams }: { searchParams: SP }) {
+export default async function ComparePage({ searchParams }: { searchParams: PageSearchParams }) {
+  const params = await searchParams;
   const [a, b] = await Promise.all([
-    loadSide(parseRef(searchParams.a)),
-    loadSide(parseRef(searchParams.b)),
+    loadSide(parseRef(params.a)),
+    loadSide(parseRef(params.b)),
   ]);
 
   return (
@@ -50,8 +53,8 @@ export default async function ComparePage({ searchParams }: { searchParams: SP }
       </p>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2">
-        <Slot side="a" data={a} other={b} initialQuery={searchParams.a} />
-        <Slot side="b" data={b} other={a} initialQuery={searchParams.b} />
+        <Slot side="a" data={a} other={b} initialQuery={params.a} />
+        <Slot side="b" data={b} other={a} initialQuery={params.b} />
       </div>
 
       {a && b && a.stats && b.stats && (

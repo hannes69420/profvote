@@ -1,6 +1,7 @@
 import './globals.css';
 import Footer from '@app/components/Layout/Footer';
 import Header from '@app/components/Layout/Header';
+import Script from 'next/script';
 
 export const revalidate = 60;
 
@@ -12,7 +13,6 @@ export const metadata = {
   },
   description:
     'Anonyme, verifizierte Bewertungen von Professor:innen an deutschen Universitäten. Stuttgart, KIT und mehr.',
-  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'ProfVote',
     description: 'Anonyme Professor:innen-Bewertungen für deutsche Unis.',
@@ -21,6 +21,11 @@ export const metadata = {
     siteName: 'ProfVote',
   },
   twitter: { card: 'summary_large_image' },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 const themeInitScript = `(function(){try{var m=localStorage.getItem('theme')||'system';var d=m==='dark'||(m==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
@@ -32,10 +37,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {themeInitScript}
+        </Script>
         <Header />
         <main className="min-h-[70vh]">{children}</main>
         <Footer />

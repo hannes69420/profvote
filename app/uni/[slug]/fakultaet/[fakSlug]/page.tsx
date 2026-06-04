@@ -7,18 +7,21 @@ import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const revalidate = 300;
 
+type PageParams = Promise<{ slug: string; fakSlug: string }>;
+
 export default async function FacultyPage({
   params,
 }: {
-  params: { slug: string; fakSlug: string };
+  params: PageParams;
 }) {
-  const uni = getUniversity(params.slug);
+  const { slug, fakSlug } = await params;
+  const uni = getUniversity(slug);
   if (!uni || !uni.available) notFound();
 
   const all = await listProfessorsByUni(uni.slug as UniversitySlug);
   const faculty = Array.from(
     new Set(all.map((p) => p.faculty).filter(Boolean) as string[]),
-  ).find((f) => slugify(f) === params.fakSlug);
+  ).find((f) => slugify(f) === fakSlug);
 
   if (!faculty) notFound();
 

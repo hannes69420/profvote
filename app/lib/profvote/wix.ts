@@ -2,6 +2,7 @@ import { createClient, OAuthStrategy, ApiKeyStrategy } from '@wix/sdk';
 import { items } from '@wix/data';
 
 let visitorClient: Awaited<ReturnType<typeof makeVisitor>> | null = null;
+let readClientUnavailable = false;
 
 async function makeVisitor() {
   const client = createClient({
@@ -14,8 +15,22 @@ async function makeVisitor() {
 }
 
 export async function getReadClient() {
+  if (readClientUnavailable) return null;
   if (!visitorClient) visitorClient = await makeVisitor();
   return visitorClient;
+}
+
+export async function tryGetReadClient() {
+  try {
+    return await getReadClient();
+  } catch (error) {
+    readClientUnavailable = true;
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Using local demo data because Wix is unavailable.', error);
+      return null;
+    }
+    throw error;
+  }
 }
 
 export function getAdminClient() {

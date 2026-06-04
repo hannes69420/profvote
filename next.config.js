@@ -2,13 +2,17 @@
 const nextConfig = {
   env: {},
   reactStrictMode: true,
-  swcMinify: true,
   experimental: {},
-  eslint: {
-    dirs: ['app'],
+  turbopack: {
+    root: __dirname,
   },
   images: {
-    domains: ['static.wixstatic.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'static.wixstatic.com',
+      },
+    ],
     formats: ['image/webp'],
   },
 };

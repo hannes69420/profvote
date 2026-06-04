@@ -1,4 +1,5 @@
-import { getReadClient } from './wix';
+import { tryGetReadClient } from './wix';
+import { DEMO_REVIEWS, listDemoReviewsForProfessor } from './demoData';
 import { REVIEW_COLLECTION } from './universities';
 import type { AggregatedRatings, RatingBreakdown, Review, UniversitySlug } from './types';
 
@@ -61,7 +62,8 @@ export async function listReviewsForProfessor(
 ): Promise<Review[]> {
   const collection = REVIEW_COLLECTION[uni];
   if (!collection) return [];
-  const wix = await getReadClient();
+  const wix = await tryGetReadClient();
+  if (!wix) return listDemoReviewsForProfessor(uni, professorId);
   const reviews: Review[] = [];
   let q = wix.items.query(collection).limit(100);
   if (uni === 'stuttgart') q = q.eq('professorID', professorId);
@@ -81,7 +83,12 @@ export async function listReviewsForProfessor(
 }
 
 export async function listRecentReviews(limit = 8): Promise<Review[]> {
-  const wix = await getReadClient();
+  const wix = await tryGetReadClient();
+  if (!wix) {
+    return DEMO_REVIEWS.filter((r) => r.verified)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, limit);
+  }
   const unis: UniversitySlug[] = ['stuttgart', 'kit', 'tum'];
   const all: Review[] = [];
   await Promise.all(

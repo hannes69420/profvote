@@ -1,4 +1,5 @@
-import { getReadClient } from './wix';
+import { tryGetReadClient } from './wix';
+import { DEMO_PROFESSORS, listDemoProfessorsByUni } from './demoData';
 import { PROF_COLLECTION, UNI_CONFIG } from './universities';
 import type { Professor, UniversitySlug } from './types';
 
@@ -39,7 +40,8 @@ export async function listProfessorsByUni(uniSlug: UniversitySlug): Promise<Prof
   if (!UNI_CONFIG[uniSlug]?.available) return [];
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return [];
-  const wix = await getReadClient();
+  const wix = await tryGetReadClient();
+  if (!wix) return listDemoProfessorsByUni(uniSlug);
   const all: Professor[] = [];
   let skip = 0;
   const pageSize = 100;
@@ -75,7 +77,8 @@ export async function listTopProfessors(limit = 5): Promise<Professor[]> {
 export async function getProfessorById(uniSlug: UniversitySlug, id: string): Promise<Professor | null> {
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return null;
-  const wix = await getReadClient();
+  const wix = await tryGetReadClient();
+  if (!wix) return DEMO_PROFESSORS.find((p) => p.uni === uniSlug && p.id === id) ?? null;
   try {
     const res = await wix.items.query(collection).eq('_id', id).limit(1).find();
     const raw = res.items?.[0] as Record<string, unknown> | undefined;
