@@ -1,52 +1,82 @@
-import './footer.css';
-import { Logo } from '@app/components/Logo/Logo';
-import testIds from '@app/utils/test-ids';
+import Link from 'next/link';
+
+const LINKS = [
+  {
+    heading: 'Plattform',
+    items: [
+      { label: 'Uni Stuttgart', href: '/uni/stuttgart' },
+      { label: 'KIT', href: '/uni/kit' },
+      { label: 'Vergleich', href: '/vergleich' },
+    ],
+  },
+  {
+    heading: 'Rechtliches',
+    items: [
+      { label: 'Impressum', href: '/impressum' },
+      { label: 'Datenschutz', href: '/datenschutz' },
+      { label: 'Nutzungsbedingungen', href: '/nutzungsbedingungen' },
+      { label: 'Rechtliche Grundlagen', href: '/rechtliches' },
+    ],
+  },
+  {
+    heading: 'Kontakt',
+    items: [
+      { label: 'profvote-info@gmx.de', href: 'mailto:profvote-info@gmx.de' },
+    ],
+  },
+];
 
 const Footer = () => (
   <footer
-    className="m-h-56 leading-7 sm:p-14 font-site"
-    data-testid={testIds.LAYOUT.FOOTER}
+    className="mt-24 border-t"
+    style={{ background: 'rgb(var(--bg-soft))', borderColor: 'rgb(var(--border))' }}
   >
-    <div className="flex flex-col sm:flex-row">
-      <div className="basis-2/3 bg-blue-site text-white p-14 sm:pl-44">
-        <h2 className="text-2xl sm:text-3xl font-bold">CONTACT US</h2>
-        <div className="flex flex-col sm:flex-row text-sm font-helvetica">
-          <div className="basis-1/3 border-b border-white pb-4">
-            <p className="mt-10">
-              Please reach out to us with any questions or concerns. We’re happy
-              to hear from you.
-            </p>
-            <p className="mt-10">Registered Charity: 12345-67</p>
+    <div className="container-prose py-14">
+      <div className="grid gap-10 sm:grid-cols-[2fr_1fr_1fr_1fr]">
+        <div>
+          <div className="font-display text-xl font-semibold tracking-tightest text-ink-soft">
+            ProfVote
           </div>
-          <div className="basis-1/3"></div>
-          <div className="basis-1/2 border-b border-white pb-4">
-            <p className="mt-10">
-              500 Terry Francois Street
-              <br /> San Francisco, CA 94158
-            </p>
-            <p className="mt-10">Phone: 1-800-000-0000</p>
-          </div>
+          <p className="mt-3 max-w-xs text-sm text-ink-muted">
+            Anonyme, verifizierte Bewertungen von Professor:innen an deutschen Universitäten.
+          </p>
+          <p className="mt-4 text-xs text-ink-muted">
+            Schätzle und Conrads Profvote GbR
+          </p>
         </div>
-        <h3 className="text-4xl mt-10">info@mysite.com</h3>
+
+        {LINKS.map((col) => (
+          <div key={col.heading}>
+            <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              {col.heading}
+            </div>
+            <ul className="space-y-2">
+              {col.items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-ink-muted transition-colors hover:text-ink-soft"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <div className="basis-1/3 bg-gray-200 p-14 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold">BE THE FIRST TO KNOW</h2>
-        <p className="mt-6">Sign up to our newsletter to stay informed</p>
-        <input
-          type="email"
-          className="my-6 w-3/4 block mx-auto bg-transparent border-0 border-b border-blue-site text-blue-site"
-          placeholder="Email Address"
-        />
-        <a href="" className="text-purple-site py-6 font-site">
-          Subscribe Now
-        </a>
+
+      <div
+        className="mt-12 flex flex-col gap-2 border-t pt-8 sm:flex-row sm:items-center sm:justify-between"
+        style={{ borderColor: 'rgb(var(--border))' }}
+      >
+        <p className="text-xs text-ink-muted">
+          © {new Date().getFullYear()} Schätzle und Conrads Profvote GbR. Inhalte stammen von Studierenden.
+        </p>
+        <p className="text-xs text-ink-muted">
+          Bewertungen sind Meinungsäußerungen gemäß BGH-Urteil VI ZR 196/08.
+        </p>
       </div>
-    </div>
-    <div className="mx-auto text-center sm:text-xs mt-6">
-      <Logo />
-      <p className="font-default mb-10">
-        © 2035 ChoosEquality. Powered and secured by Wix
-      </p>
     </div>
   </footer>
 );

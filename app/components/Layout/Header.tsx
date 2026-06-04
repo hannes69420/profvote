@@ -1,32 +1,33 @@
-import { NavBar } from '@app/components/Layout/NavBar/NavBar';
-import { Logo } from '@app/components/Logo/Logo';
-import testIds from '@app/utils/test-ids';
+import Link from 'next/link';
+import { GlobalSearch } from '@app/components/GlobalSearch';
+import { ThemeToggle } from '@app/components/ThemeToggle';
 
 const Header = () => (
-  <>
-    <header
-      className="w-full my-6 px-2 sm:px-8"
-      data-testid={testIds.LAYOUT.HEADER}
-    >
-      <div className="flex sm:px-6 sm:px-14 h-header sm:items-center sm:gap-4 sm:gap-8">
-        <h2 className="flex-1">
-          <a
-            href="/"
-            className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6"
-          >
-            <Logo />
-            <div>
-              <span className="block font-site">ChoosEquality</span>
-              <span className="text-xs">Education for All</span>
-            </div>
-          </a>
-        </h2>
-        <div>
-          <NavBar />
-        </div>
+  <header
+    className="sticky top-0 z-40 border-b backdrop-blur-md"
+    style={{ background: 'rgb(var(--bg) / 0.8)', borderColor: 'rgb(var(--border))' }}
+  >
+    <div className="container-prose flex h-14 items-center justify-between gap-4">
+      <Link href="/" className="shrink-0 font-display text-lg font-semibold tracking-tightest text-ink-soft">
+        ProfVote
+      </Link>
+      <nav className="hidden items-center gap-6 text-sm text-ink-muted md:flex">
+        <Link href="/uni/stuttgart" className="transition-colors hover:text-ink-soft">
+          Stuttgart
+        </Link>
+        <Link href="/uni/kit" className="transition-colors hover:text-ink-soft">
+          KIT
+        </Link>
+        <Link href="/vergleich" className="transition-colors hover:text-ink-soft">
+          Vergleich
+        </Link>
+      </nav>
+      <div className="flex items-center gap-2">
+        <GlobalSearch />
+        <ThemeToggle />
       </div>
-    </header>
-  </>
+    </div>
+  </header>
 );
 
 export default Header;

@@ -1,31 +1,40 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './node_modules/flowbite-react/**/*.js',
-    './app/**/*.{js,ts,jsx,tsx}',
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
+  darkMode: 'class',
+  content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      fontSize: {
-        12: '12px',
+      fontFamily: {
+        sans: [
+          '-apple-system','BlinkMacSystemFont','"SF Pro Text"','"Segoe UI"','system-ui','sans-serif',
+        ],
+        display: [
+          '-apple-system','BlinkMacSystemFont','"SF Pro Display"','"Segoe UI"','system-ui','sans-serif',
+        ],
       },
+      letterSpacing: { tightest: '-0.03em' },
       colors: {
-        'purple-site': '#8751BD',
-        'blue-site': '#2859B6',
-      },
-      keyframes: {
-        fade: {
-          '0%': { opacity: 0 },
-          '50%': { opacity: 0.5 },
-          '100%': { opacity: 1 },
+        ink: {
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          soft: 'rgb(var(--ink-soft) / <alpha-value>)',
+          muted: 'rgb(var(--ink-muted) / <alpha-value>)',
+        },
+        canvas: {
+          DEFAULT: 'rgb(var(--bg) / <alpha-value>)',
+          soft: 'rgb(var(--bg-soft) / <alpha-value>)',
+        },
+        accent: {
+          DEFAULT: '#0071e3',
+          hover: '#0a84ff',
         },
       },
-      animation: {
-        'fade-in': 'fade 3s ease-in-out',
+      borderColor: {
+        DEFAULT: 'rgb(var(--border) / <alpha-value>)',
+      },
+      boxShadow: {
+        card: 'var(--card-shadow)',
       },
     },
   },
-  plugins: [require('flowbite/plugin')],
+  plugins: [],
 };
