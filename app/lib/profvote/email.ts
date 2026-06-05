@@ -1,15 +1,16 @@
-import { Resend } from 'resend';
+// Email via Brevo Transactional API (no SDK — plain fetch)
 
-let cached: Resend | null = null;
-function client() {
-  if (!cached) {
-    if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY missing');
-    cached = new Resend(process.env.RESEND_API_KEY);
-  }
-  return cached;
+const BREVO_ENDPOINT = 'https://api.brevo.com/v3/smtp/email';
+
+function getConfig() {
+  const key = process.env.BREVO_API_KEY;
+  if (!key) throw new Error('BREVO_API_KEY missing');
+  return {
+    key,
+    fromName: process.env.BREVO_FROM_NAME || 'ProfVote',
+    fromEmail: process.env.BREVO_FROM_EMAIL || 'verification@profvote.de',
+  };
 }
-
-const FROM = process.env.RESEND_FROM || 'ProfVote <onboarding@resend.dev>';
 
 export async function sendVerificationEmail(opts: {
   to: string;
@@ -17,6 +18,8 @@ export async function sendVerificationEmail(opts: {
   verifyUrl: string;
 }) {
   const { to, professorName, verifyUrl } = opts;
+  const { key, fromName, fromEmail } = getConfig();
+
   const html = `<!doctype html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;background:#f5f5f7;margin:0;padding:32px;color:#1d1d1f">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#fff;border-radius:24px;padding:40px">
       <tr><td>
@@ -42,17 +45,32 @@ export async function sendVerificationEmail(opts: {
 
   const text = `Bewertung bestätigen\n\nDu hast eine Bewertung für ${professorName} auf ProfVote abgegeben. Bestätige sie hier:\n${verifyUrl}\n\nUnbestätigte Bewertungen werden nach 3 Tagen gelöscht.`;
 
-  const res = await client().emails.send({
-    from: FROM,
-    to,
+  const body = {
+    sender: { name: fromName, email: fromEmail },
+    to: [{ email: to }],
     subject: `Bewertung für ${professorName} bestätigen`,
-    html,
-    text,
+    htmlContent: html,
+    textContent: text,
+  };
+
+  const res = await fetch(BREVO_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'api-key': key,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(body),
   });
-  if (res.error) {
-    throw new Error(`Resend: ${res.error.name} — ${res.error.message}`);
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(
+      `Brevo error ${res.status}: ${(err as { message?: string }).message || res.statusText}`,
+    );
   }
-  return res.data;
+
+  return res.json();
 }
 
 function escapeHtml(s: string) {
