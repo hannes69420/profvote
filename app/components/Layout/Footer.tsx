@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CookieSettingsLink } from './CookieSettingsLink';
 
 const LINKS = [
   {
@@ -20,9 +21,7 @@ const LINKS = [
   },
   {
     heading: 'Kontakt',
-    items: [
-      { label: 'profvote-info@gmx.de', href: 'mailto:profvote-info@gmx.de' },
-    ],
+    items: [{ label: 'profvote-info@gmx.de', href: 'mailto:profvote-info@gmx.de' }],
   },
 ];
 
@@ -40,9 +39,7 @@ const Footer = () => (
           <p className="mt-3 max-w-xs text-sm text-ink-muted">
             Anonyme, verifizierte Bewertungen von Professor:innen an deutschen Universitäten.
           </p>
-          <p className="mt-4 text-xs text-ink-muted">
-            Schätzle und Conrads Profvote GbR
-          </p>
+          <p className="mt-4 text-xs text-ink-muted">Schätzle und Conrads Profvote GbR</p>
         </div>
 
         {LINKS.map((col) => (
@@ -71,11 +68,13 @@ const Footer = () => (
         style={{ borderColor: 'rgb(var(--border))' }}
       >
         <p className="text-xs text-ink-muted">
-          © {new Date().getFullYear()} Schätzle und Conrads Profvote GbR. Inhalte stammen von Studierenden.
+          © {new Date().getFullYear()} Schätzle und Conrads Profvote GbR. Inhalte stammen
+          von Studierenden.
         </p>
         <p className="text-xs text-ink-muted">
           Bewertungen sind Meinungsäußerungen gemäß BGH-Urteil VI ZR 196/08.
         </p>
+        <CookieSettingsLink />
       </div>
     </div>
   </footer>

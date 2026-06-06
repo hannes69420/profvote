@@ -114,6 +114,38 @@ export async function listRecentReviews(limit = 8): Promise<Review[]> {
   return all.slice(0, limit);
 }
 
+export async function listReviewsByUni(uni: UniversitySlug): Promise<Review[]> {
+  const collection = REVIEW_COLLECTION[uni];
+  if (!collection) return [];
+  const wix = await tryGetReadClient();
+  if (!wix) return [];
+
+  const reviews: Review[] = [];
+  let skip = 0;
+  const pageSize = 100;
+  while (true) {
+    try {
+      const res = await wix.items
+        .query(collection)
+        .descending('_createdDate')
+        .limit(pageSize)
+        .skip(skip)
+        .find();
+      for (const it of res.items as Record<string, unknown>[]) {
+        const review = normalizeReview(uni, it);
+        if (review && review.verified) reviews.push(review);
+      }
+      if (!res.items?.length || res.items.length < pageSize) break;
+      skip += pageSize;
+      if (skip > 5000) break;
+    } catch {
+      break;
+    }
+  }
+
+  return reviews.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
 export function aggregate(reviews: Review[]): AggregatedRatings | null {
   if (!reviews.length) return null;
   const sum: RatingBreakdown = {

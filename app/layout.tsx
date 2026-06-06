@@ -1,6 +1,7 @@
 import './globals.css';
 import Footer from '@app/components/Layout/Footer';
 import Header from '@app/components/Layout/Header';
+import { CookieConsent } from '@app/components/CookieConsent';
 import Script from 'next/script';
 
 export const revalidate = 60;
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Header />
         <main className="min-h-[70vh]">{children}</main>
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   );
