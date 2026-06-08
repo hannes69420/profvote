@@ -167,11 +167,11 @@ function StarPicker({
             onClick={() => onChange(n)}
             onMouseEnter={() => setHover(n)}
             aria-label={`Bewertung ${n} von 5`}
-            className={`grid h-10 w-10 place-items-center rounded-full text-3xl leading-none transition-all
+            className={`grid h-10 w-10 place-items-center text-3xl leading-none transition-all
                         ${
                           n <= active
-                            ? 'scale-105 text-ink-soft drop-shadow-sm'
-                            : 'text-neutral-300 hover:scale-105 hover:text-ink-soft/70'
+                            ? 'scale-110 text-[#f5b301] drop-shadow-sm'
+                            : 'text-neutral-300 hover:scale-110 hover:text-[#f5b301]'
                         }`}
           >
             ★
