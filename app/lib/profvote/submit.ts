@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { getAdminClient } from './wix';
 import { REVIEW_COLLECTION, UNI_CONFIG } from './universities';
 import type { RatingBreakdown, UniversitySlug } from './types';
@@ -19,8 +20,6 @@ export function isAllowedEmail(uni: UniversitySlug, email: string): boolean {
 }
 
 function randomToken(): string {
-  // crypto.randomBytes is cryptographically secure (unlike Math.random)
-  const { randomBytes } = require('crypto') as typeof import('crypto');
   return randomBytes(32).toString('hex');
 }
 
