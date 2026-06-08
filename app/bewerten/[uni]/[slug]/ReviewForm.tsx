@@ -180,8 +180,8 @@ function StarPicker({
             className={`grid h-10 w-9 place-items-center text-4xl leading-none transition-all duration-150 active:scale-95
                         ${
                           n <= active
-                            ? 'scale-110 text-[#f5b301] drop-shadow-[0_4px_10px_rgba(245,179,1,0.28)]'
-                            : 'text-neutral-300 hover:-translate-y-0.5 hover:scale-110 hover:text-[#f5b301]'
+                            ? 'scale-110 text-ink-soft drop-shadow-sm'
+                            : 'text-neutral-300 hover:-translate-y-0.5 hover:scale-110 hover:text-ink-soft/70'
                         }`}
           >
             ★
