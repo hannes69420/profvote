@@ -1,5 +1,6 @@
 import { tryGetReadClient } from './wix';
 import { DEMO_PROFESSORS, listDemoProfessorsByUni } from './demoData';
+import { TUM_PROFESSOR_ROWS } from './tumProfessors';
 import { PROF_COLLECTION, UNI_CONFIG } from './universities';
 import type { Professor, UniversitySlug } from './types';
 
@@ -36,8 +37,28 @@ function normalizeProf(uni: UniversitySlug, raw: Record<string, unknown>): Profe
   };
 }
 
+function listTumProfessors(): Professor[] {
+  const seen = new Map<string, number>();
+  return TUM_PROFESSOR_ROWS.map((row, index) => {
+    const baseSlug = slugify(row.name);
+    const nextCount = (seen.get(baseSlug) ?? 0) + 1;
+    seen.set(baseSlug, nextCount);
+    const slug = nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`;
+
+    return {
+      id: `tum-${String(index + 1).padStart(4, '0')}`,
+      slug,
+      uni: 'tum',
+      name: row.name,
+      faculty: row.faculty,
+      title: 'Professor',
+    };
+  });
+}
+
 export async function listProfessorsByUni(uniSlug: UniversitySlug): Promise<Professor[]> {
   if (!UNI_CONFIG[uniSlug]?.available) return [];
+  if (uniSlug === 'tum') return listTumProfessors();
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return [];
   const wix = await tryGetReadClient();
@@ -62,7 +83,9 @@ export async function getProfessor(uniSlug: UniversitySlug, slug: string): Promi
 }
 
 export async function listTopProfessors(limit = 5): Promise<Professor[]> {
-  const unis: UniversitySlug[] = ['stuttgart', 'kit'];
+  const unis = Object.values(UNI_CONFIG)
+    .filter((u) => u.available)
+    .map((u) => u.slug);
   const lists = await Promise.all(unis.map((u) => listProfessorsByUni(u)));
   const all = lists.flat().filter((p) => (p.reviewCount ?? 0) > 0 || (p.avgOverall ?? 0) > 0);
   // Wilson-ish ranking: rating * log(1 + count) to favor profs with both high rating + volume
@@ -75,6 +98,7 @@ export async function listTopProfessors(limit = 5): Promise<Professor[]> {
 }
 
 export async function getProfessorById(uniSlug: UniversitySlug, id: string): Promise<Professor | null> {
+  if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return null;
   const wix = await tryGetReadClient();

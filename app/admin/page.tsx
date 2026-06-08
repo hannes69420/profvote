@@ -29,7 +29,7 @@ export default function AdminPage() {
   const searchParams = useSearchParams();
   const secret = searchParams.get('secret') || '';
   const [tab, setTab] = useState<Tab>('kommentare');
-  const [uni, setUni] = useState<'stuttgart' | 'kit'>('stuttgart');
+  const [uni, setUni] = useState<'stuttgart' | 'kit' | 'tum'>('stuttgart');
   const [filter, setFilter] = useState<'all' | 'pending' | 'verified'>('all');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
@@ -116,10 +116,10 @@ export default function AdminPage() {
         {/* Uni selector */}
         <div className="mt-6 flex flex-wrap gap-3">
           <div className="flex overflow-hidden rounded-xl border" style={{ borderColor: 'rgb(var(--border))' }}>
-            {(['stuttgart', 'kit'] as const).map((u) => (
+            {(['stuttgart', 'kit', 'tum'] as const).map((u) => (
               <button key={u} onClick={() => setUni(u)}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${uni === u ? 'bg-ink-soft text-white' : 'bg-white text-ink-muted hover:text-ink-soft dark:bg-neutral-900'}`}>
-                {u === 'stuttgart' ? 'Stuttgart' : 'KIT'}
+                {u === 'stuttgart' ? 'Stuttgart' : u === 'kit' ? 'KIT' : 'TUM'}
               </button>
             ))}
           </div>

@@ -24,7 +24,6 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // ⌘K / Ctrl+K shortcut
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -41,7 +40,6 @@ export function GlobalSearch() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Debounced search
   useEffect(() => {
     if (q.trim().length < 2) {
       setHits([]);
@@ -90,12 +88,13 @@ export function GlobalSearch() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative min-w-0 flex-1 sm:flex-none">
       <div className="relative">
         <svg
           aria-hidden
           className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted"
-          viewBox="0 0 20 20" fill="none"
+          viewBox="0 0 20 20"
+          fill="none"
         >
           <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
           <path d="M14 14l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -104,31 +103,31 @@ export function GlobalSearch() {
           ref={inputRef}
           type="search"
           value={q}
-          onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onKeyDown={onKeyDown}
-          placeholder="Prof suchen…"
-          className="w-32 rounded-full border border-neutral-200 bg-white/70 pl-9 pr-10 py-2 text-sm
-                     placeholder:text-ink-muted backdrop-blur-md focus:w-48 focus:border-ink-soft/30
-                     focus:outline-none focus:ring-2 focus:ring-ink-soft/10 transition-[width,border-color]
-                     duration-200 sm:w-56 sm:pr-12 sm:focus:w-80"
+          placeholder="Prof suchen"
+          className="w-full min-w-[9.5rem] max-w-[13rem] rounded-full border border-neutral-200 bg-white/70 py-2 pl-9 pr-9 text-sm
+                     placeholder:text-ink-muted backdrop-blur-md transition-[width,border-color] duration-200
+                     focus:max-w-[15rem] focus:border-ink-soft/30 focus:outline-none focus:ring-2 focus:ring-ink-soft/10
+                     sm:w-56 sm:max-w-none sm:pr-12 sm:focus:w-80"
         />
-        <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline
-                        rounded border border-neutral-200 bg-canvas-soft px-1.5 py-0.5 text-[10px]
-                        font-medium text-ink-muted">
-          ⌘K
+        <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-neutral-200 bg-canvas-soft px-1.5 py-0.5 text-[10px] font-medium text-ink-muted sm:inline">
+          Ctrl K
         </kbd>
       </div>
 
       {open && (q.trim().length >= 2 || loading) && (
-        <div className="absolute right-0 mt-2 w-[min(28rem,calc(100vw-2rem))] overflow-hidden
-                        rounded-2xl border border-neutral-200/70 bg-white/95 shadow-card backdrop-blur-md">
+        <div className="absolute right-0 mt-2 w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-neutral-200/70 bg-white/95 shadow-card backdrop-blur-md">
           {loading && hits.length === 0 ? (
-            <div className="px-4 py-6 text-center text-sm text-ink-muted">Suche…</div>
+            <div className="px-4 py-6 text-center text-sm text-ink-muted">Suche...</div>
           ) : hits.length === 0 ? (
             <div className="px-4 py-6 text-center text-sm text-ink-muted">
-              Keine Treffer für „{q}"
+              Keine Treffer fuer "{q}"
             </div>
           ) : (
             <ul className="max-h-[60vh] overflow-y-auto py-1">
@@ -137,20 +136,28 @@ export function GlobalSearch() {
                   <button
                     type="button"
                     onMouseEnter={() => setFocused(i)}
-                    onMouseDown={(e) => { e.preventDefault(); go(h); }}
-                    className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors
-                                ${i === focused ? 'bg-canvas-soft' : ''}`}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      go(h);
+                    }}
+                    className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+                      i === focused ? 'bg-canvas-soft' : ''
+                    }`}
                   >
                     <Avatar name={h.name} size={32} />
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate font-medium text-ink-soft">{h.name}</span>
+                      <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="min-w-0 break-words font-medium leading-snug text-ink-soft">
+                          {h.name}
+                        </span>
                         <span className="shrink-0 rounded-full bg-canvas-soft px-2 py-0.5 text-[10px] font-medium text-ink-muted">
                           {h.uniShort}
                         </span>
                       </div>
                       {h.faculty && (
-                        <div className="mt-0.5 truncate text-xs text-ink-muted">{h.faculty}</div>
+                        <div className="mt-0.5 break-words text-xs leading-snug text-ink-muted">
+                          {h.faculty}
+                        </div>
                       )}
                     </div>
                     {h.avgOverall != null && (

@@ -40,24 +40,24 @@ export default async function FacultyPage({
       <h1 className="mt-4">{faculty}</h1>
       <p className="mt-3 text-lg text-ink-muted">{uni.name}</p>
 
-      <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-8">
+      <dl className="mt-8 grid max-w-2xl grid-cols-3 gap-4 sm:mt-10 sm:gap-8">
         <Stat label="Professoren" value={profs.length.toString()} />
         <Stat label="Bewertungen" value={totalReviews.toString()} />
         <Stat label="Ø Bewertung" value={avgFaculty ? avgFaculty.toFixed(2) : '–'} />
       </dl>
 
-      <ul className="mt-10 divide-y divide-neutral-200/70 rounded-3xl bg-white shadow-card">
+      <ul className="mt-8 min-w-0 divide-y divide-neutral-200/70 rounded-2xl bg-white shadow-card sm:mt-10 sm:rounded-3xl">
         {profs
           .sort((a, b) => (b.avgOverall ?? -1) - (a.avgOverall ?? -1) || a.name.localeCompare(b.name, 'de'))
           .map((p) => (
             <li key={p.id}>
               <Link
                 href={`/prof/${uni.slug}/${p.slug}`}
-                className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-canvas-soft"
+                className="flex min-w-0 items-center gap-3 px-4 py-3 transition-colors hover:bg-canvas-soft sm:gap-4 sm:px-5 sm:py-3.5"
               >
                 <Avatar name={p.name} size={40} />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate font-medium text-ink-soft">{p.name}</div>
+                  <div className="break-words font-medium leading-snug text-ink-soft">{p.name}</div>
                   {p.title && <div className="mt-0.5 text-xs text-ink-muted">{p.title}</div>}
                 </div>
                 <div className="flex shrink-0 items-center gap-3 text-sm">

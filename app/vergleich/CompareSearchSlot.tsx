@@ -80,8 +80,8 @@ export function CompareSearchSlot({
               >
                 <Avatar name={h.name} size={28} />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium text-ink-soft">{h.name}</div>
-                  <div className="truncate text-xs text-ink-muted">{h.uniShort}{h.faculty ? ` · ${h.faculty}` : ''}</div>
+                  <div className="break-words text-sm font-medium leading-snug text-ink-soft">{h.name}</div>
+                  <div className="break-words text-xs leading-snug text-ink-muted">{h.uniShort}{h.faculty ? ` · ${h.faculty}` : ''}</div>
                 </div>
               </button>
             </li>

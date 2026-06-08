@@ -67,10 +67,10 @@ export default async function ProfPage({
           </Link>
 
           <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-5">
-              <Avatar name={prof.name} size={88} className="shadow-card" />
-              <div>
-                <h1 className="!text-4xl sm:!text-5xl">{prof.name}</h1>
+            <div className="flex min-w-0 items-center gap-4 sm:gap-5">
+              <Avatar name={prof.name} size={76} className="shrink-0 shadow-card" />
+              <div className="min-w-0">
+                <h1 className="break-words !text-3xl sm:!text-5xl">{prof.name}</h1>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   {prof.faculty && (
                     <Link
@@ -126,7 +126,7 @@ export default async function ProfPage({
 
         <section className="mt-6">
           <div>
-            <div className="mb-3 flex items-baseline justify-between">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
               <h2>Kommentare</h2>
               <span className="text-sm text-ink-muted">
                 {withText.length}{withText.length !== reviews.length && reviews.length > 0
@@ -148,8 +148,8 @@ export default async function ProfPage({
               ) : (
                 withText.map((r) => (
                   <li key={r.id} className="card">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-canvas-soft px-3 py-1 text-xs font-semibold text-ink-soft">
                           Bewertung {r.ratings.insgesamt}/5
                         </span>
@@ -157,7 +157,7 @@ export default async function ProfPage({
                           · Schwierigkeit {r.ratings.schwierigkeit}/5
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
                         <time className="text-xs text-ink-muted">
                           {new Date(r.createdAt).toLocaleDateString('de-DE', {
                             year: 'numeric',

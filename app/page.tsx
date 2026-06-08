@@ -19,7 +19,7 @@ type UniComparison = {
 
 export default async function Home() {
   const unis = listUniversities();
-  const availableUnis = unis.filter((u) => u.available).slice(0, 2);
+  const availableUnis = unis.filter((u) => u.available);
   const [counts, topProfs, recent] = await Promise.all([
     Promise.all(
       unis.map(async (u) =>
@@ -30,12 +30,7 @@ export default async function Home() {
     listRecentReviews(6),
   ]);
   const uniComparisons = await Promise.all(availableUnis.map((u) => getUniComparison(u)));
-  const [firstUni, secondUni] = uniComparisons;
-  const winnerSlug = getComparisonWinnerSlug(firstUni, secondUni);
-  const isTie =
-    firstUni?.average != null &&
-    secondUni?.average != null &&
-    firstUni.average === secondUni.average;
+  const { winnerSlug, isTie } = getComparisonWinner(uniComparisons);
 
   const recentProfs = await Promise.all(
     recent.map((r) => getProfessorById(r.uni, r.professorId)),
@@ -80,6 +75,9 @@ export default async function Home() {
             <Link href="/uni/kit" className="btn-secondary">
               KIT durchsuchen
             </Link>
+            <Link href="/uni/tum" className="btn-secondary">
+              TUM durchsuchen
+            </Link>
           </div>
 
           <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-4 sm:mt-16 sm:gap-8">
@@ -109,7 +107,7 @@ export default async function Home() {
           )}
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           {uniComparisons.map((comparison) => (
             <UniComparisonCard
               key={comparison.university.slug}
@@ -176,7 +174,7 @@ export default async function Home() {
                       </span>
                     </div>
                     {r.comment && (
-                      <p className="mt-3 line-clamp-2 text-sm text-ink-soft">
+                      <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                         „{r.comment}"
                       </p>
                     )}
@@ -211,18 +209,20 @@ export default async function Home() {
   );
 }
 
-function getComparisonWinnerSlug(
-  firstUni?: UniComparison,
-  secondUni?: UniComparison,
-): UniversitySlug | null {
-  if (!firstUni || !secondUni) return null;
-  if (firstUni.average != null && secondUni.average == null) return firstUni.university.slug;
-  if (secondUni.average != null && firstUni.average == null) return secondUni.university.slug;
-  if (firstUni.average == null || secondUni.average == null) return null;
-  if (firstUni.average === secondUni.average) return null;
-  return firstUni.average > secondUni.average
-    ? firstUni.university.slug
-    : secondUni.university.slug;
+function getComparisonWinner(comparisons: UniComparison[]): {
+  winnerSlug: UniversitySlug | null;
+  isTie: boolean;
+} {
+  const withReviews = comparisons.filter((comparison) => comparison.average != null);
+  if (withReviews.length === 0) return { winnerSlug: null, isTie: false };
+
+  const bestAverage = Math.max(...withReviews.map((comparison) => comparison.average ?? 0));
+  const winners = withReviews.filter((comparison) => comparison.average === bestAverage);
+
+  return {
+    winnerSlug: winners.length === 1 ? winners[0].university.slug : null,
+    isTie: winners.length > 1,
+  };
 }
 
 async function getUniComparison(university: University): Promise<UniComparison> {
@@ -260,12 +260,12 @@ function UniComparisonCard({
     >
       <div className="flex h-full flex-col justify-between gap-8">
         <div>
-          <div className="flex items-start justify-between gap-4">
-            <div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div className="min-w-0">
               <p className="text-sm font-medium text-ink-muted">
                 {university.shortName}
               </p>
-              <h3 className="mt-2 text-2xl text-ink-soft sm:text-3xl">
+              <h3 className="mt-2 break-words text-2xl leading-tight text-ink-soft sm:text-3xl">
                 {university.name}
               </h3>
             </div>

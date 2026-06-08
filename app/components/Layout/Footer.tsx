@@ -8,6 +8,7 @@ const LINKS = [
     items: [
       { label: 'Uni Stuttgart', href: '/uni/stuttgart' },
       { label: 'KIT', href: '/uni/kit' },
+      { label: 'TUM', href: '/uni/tum' },
       { label: 'Vergleich', href: '/vergleich' },
     ],
   },

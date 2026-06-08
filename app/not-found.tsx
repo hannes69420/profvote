@@ -15,7 +15,7 @@ export default function NotFound() {
       />
 
       <p className="text-sm font-semibold uppercase tracking-widest text-ink-muted">404</p>
-      <h1 className="mt-4 !text-5xl sm:!text-6xl">Seite nicht gefunden</h1>
+      <h1 className="mt-4 break-words !text-4xl sm:!text-6xl">Seite nicht gefunden</h1>
       <p className="mx-auto mt-6 max-w-sm text-lg text-ink-muted">
         Diese Seite existiert nicht oder wurde verschoben.
       </p>
@@ -29,6 +29,9 @@ export default function NotFound() {
         </Link>
         <Link href="/uni/kit" className="btn-ghost-lg">
           KIT
+        </Link>
+        <Link href="/uni/tum" className="btn-ghost-lg">
+          TUM
         </Link>
       </div>
     </div>

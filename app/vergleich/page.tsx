@@ -112,10 +112,10 @@ function Slot({
       <div className="mt-3 flex items-center gap-3">
         <Avatar name={prof.name} size={56} />
         <div className="min-w-0">
-          <Link href={`/prof/${uni.slug}/${prof.slug}`} className="block truncate font-semibold text-ink-soft hover:underline">
+          <Link href={`/prof/${uni.slug}/${prof.slug}`} className="block break-words font-semibold leading-snug text-ink-soft hover:underline">
             {prof.name}
           </Link>
-          <div className="truncate text-sm text-ink-muted">
+          <div className="break-words text-sm leading-snug text-ink-muted">
             {uni.shortName}{prof.faculty ? ` · ${prof.faculty}` : ''}
           </div>
         </div>
@@ -154,13 +154,13 @@ function CompareBars({
         const aWins = inverse ? av < bv : av > bv;
         const bWins = inverse ? bv < av : bv > av;
         return (
-          <div key={key} className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          <div key={key} className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
             <div className="text-right">
               <span className={`tabular-nums ${aWins ? 'font-semibold text-ink-soft' : 'text-ink-muted'}`}>
                 {av.toFixed(1)}
               </span>
             </div>
-            <div className="min-w-[10rem] text-center text-xs text-ink-muted">
+            <div className="min-w-[6.5rem] text-center text-xs text-ink-muted sm:min-w-[10rem]">
               {label}
               {inverse && <div className="text-[10px] opacity-70">niedrig = leicht</div>}
             </div>

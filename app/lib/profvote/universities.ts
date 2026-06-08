@@ -29,8 +29,8 @@ export const UNI_CONFIG: Record<UniversitySlug, Omit<University, 'professorCount
     slug: 'tum',
     name: 'Technische Universität München',
     shortName: 'TUM',
-    shortDescription: 'Bald verfügbar.',
-    available: false,
+    shortDescription: '685 Professoren aus 7 TUM Schools.',
+    available: true,
     emailDomains: ['mytum.de', 'tum.de'],
   },
 };

@@ -19,7 +19,7 @@ export async function GET(req: Request) {
 
   const wix = getAdminClient();
   const now = new Date().toISOString();
-  const unis: UniversitySlug[] = ['stuttgart', 'kit'];
+  const unis: UniversitySlug[] = ['stuttgart', 'kit', 'tum'];
   let totalDeleted = 0;
 
   for (const uni of unis) {

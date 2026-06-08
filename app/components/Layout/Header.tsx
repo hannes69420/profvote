@@ -18,11 +18,14 @@ const Header = () => (
         <Link href="/uni/kit" className="transition-colors hover:text-ink-soft">
           KIT
         </Link>
+        <Link href="/uni/tum" className="transition-colors hover:text-ink-soft">
+          TUM
+        </Link>
         <Link href="/vergleich" className="transition-colors hover:text-ink-soft">
           Vergleich
         </Link>
       </nav>
-      <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+      <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
         <GlobalSearch />
         <ThemeToggle />
       </div>
