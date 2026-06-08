@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
-const CATEGORIES: Array<{ key: 'insgesamt' | 'vorlesung' | 'skript' | 'klausur' | 'organisation' | 'schwierigkeit'; label: string; hint?: string }> = [
+const CATEGORIES: Array<{
+  key: 'insgesamt' | 'vorlesung' | 'skript' | 'klausur' | 'organisation' | 'schwierigkeit';
+  label: string;
+  hint?: string;
+}> = [
   { key: 'insgesamt', label: 'Insgesamt', hint: 'Gesamteindruck' },
   { key: 'vorlesung', label: 'Vorlesung', hint: 'Qualität & Verständlichkeit' },
   { key: 'skript', label: 'Skript', hint: 'Folien, Unterlagen' },
   { key: 'klausur', label: 'Klausur', hint: 'Fairness & Vorbereitung' },
-  { key: 'organisation', label: 'Organisation', hint: 'Termine, Klausur-Anmeldung, …' },
+  { key: 'organisation', label: 'Organisation', hint: 'Termine, Klausur-Anmeldung' },
   { key: 'schwierigkeit', label: 'Schwierigkeit', hint: '1 = leicht, 5 = sehr schwer' },
 ];
 
@@ -66,7 +70,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
           geschickt. Klick darauf, damit deine Bewertung öffentlich wird.
         </p>
         <p className="mt-2 text-sm text-ink-muted">
-          Nichts angekommen? Spam-Ordner checken — oder in 3 Tagen einfach neu abgeben.
+          Nichts angekommen? Spam-Ordner checken oder in 3 Tagen einfach neu abgeben.
         </p>
       </div>
     );
@@ -78,13 +82,13 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
         {CATEGORIES.map((cat) => (
           <div
             key={cat.key}
-            className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
               <div className="text-sm font-medium text-ink-soft">{cat.label}</div>
               {cat.hint && <div className="text-xs text-ink-muted">{cat.hint}</div>}
             </div>
-            <StarPicker
+            <RatingPicker
               value={ratings[cat.key] || 0}
               onChange={(v) => setRatings((r) => ({ ...r, [cat.key]: v }))}
             />
@@ -136,30 +140,33 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
           disabled={status === 'submitting'}
           className="btn-cta disabled:opacity-50 disabled:hover:translate-y-0"
         >
-          {status === 'submitting' ? 'Sende…' : 'Bewertung absenden'}
+          {status === 'submitting' ? 'Sende...' : 'Bewertung absenden'}
         </button>
       </div>
     </form>
   );
 }
 
-function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   const [hover, setHover] = useState(0);
   const active = hover || value;
   return (
-    <div className="flex items-center gap-1" onMouseLeave={() => setHover(0)}>
+    <div className="flex items-center gap-1.5" onMouseLeave={() => setHover(0)}>
       {[1, 2, 3, 4, 5].map((n) => (
         <button
           key={n}
           type="button"
           onClick={() => onChange(n)}
           onMouseEnter={() => setHover(n)}
-          aria-label={`${n} Sterne`}
-          className={`h-8 w-8 rounded-full text-2xl leading-none transition-colors
-                      ${n <= active ? 'text-ink-soft' : 'text-neutral-300'}
-                      hover:text-ink-soft`}
+          aria-label={`Bewertung ${n} von 5`}
+          className={`grid h-9 w-9 place-items-center rounded-full border text-sm font-semibold transition-all
+                      ${
+                        n <= active
+                          ? 'border-ink-soft bg-ink-soft text-white shadow-sm'
+                          : 'border-neutral-200 bg-white text-ink-muted hover:border-ink-soft/30 hover:text-ink-soft'
+                      }`}
         >
-          ★
+          {n}
         </button>
       ))}
     </div>

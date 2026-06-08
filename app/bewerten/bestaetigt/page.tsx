@@ -16,7 +16,7 @@ export default async function ConfirmedPage({
         <div className="pill mb-6 inline-flex bg-green-50 text-green-900">Bestätigt</div>
         <h1>Danke!</h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-ink-muted">
-          Deine Bewertung ist jetzt öffentlich. Andere Studierende sehen sie ab sofort
+          Deine Bewertung ist jetzt öffentlich. Andere Studenten sehen sie ab sofort
           auf der Prof-Seite.
         </p>
         <div className="mt-10">

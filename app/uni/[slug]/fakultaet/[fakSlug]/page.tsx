@@ -41,9 +41,9 @@ export default async function FacultyPage({
       <p className="mt-3 text-lg text-ink-muted">{uni.name}</p>
 
       <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-8">
-        <Stat label="Professor:innen" value={profs.length.toString()} />
+        <Stat label="Professoren" value={profs.length.toString()} />
         <Stat label="Bewertungen" value={totalReviews.toString()} />
-        <Stat label="⌀ Sterne" value={avgFaculty ? avgFaculty.toFixed(2) : '–'} />
+        <Stat label="Ø Bewertung" value={avgFaculty ? avgFaculty.toFixed(2) : '–'} />
       </dl>
 
       <ul className="mt-10 divide-y divide-neutral-200/70 rounded-3xl bg-white shadow-card">
@@ -63,7 +63,7 @@ export default async function FacultyPage({
                 <div className="flex shrink-0 items-center gap-3 text-sm">
                   {p.avgOverall != null ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-canvas-soft px-3 py-1 font-medium text-ink-soft">
-                      ★ {p.avgOverall.toFixed(1)}
+                      {p.avgOverall.toFixed(1)}/5
                       {p.reviewCount != null && p.reviewCount > 0 && (
                         <span className="text-ink-muted">· {p.reviewCount}</span>
                       )}

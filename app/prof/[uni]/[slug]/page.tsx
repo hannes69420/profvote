@@ -19,9 +19,9 @@ export async function generateMetadata({
 }) {
   const { uni: uniSlug, slug } = await params;
   const uni = getUniversity(uniSlug);
-  if (!uni) return { title: 'Professor:in nicht gefunden' };
+  if (!uni) return { title: 'Professor nicht gefunden' };
   const prof = await getProfessor(uni.slug as UniversitySlug, slug);
-  if (!prof) return { title: 'Professor:in nicht gefunden' };
+  if (!prof) return { title: 'Professor nicht gefunden' };
   const rating = prof.avgOverall != null ? `⌀ ${prof.avgOverall.toFixed(1)}/5` : 'Noch keine Bewertungen';
   const desc = `${prof.name}${prof.faculty ? ` · ${prof.faculty}` : ''} · ${uni.shortName}. ${rating}${prof.reviewCount ? ` aus ${prof.reviewCount} Bewertungen` : ''}.`;
   return {
@@ -129,7 +129,7 @@ export default async function ProfPage({
         <section className="mt-6 grid gap-6 sm:grid-cols-5">
           <div className="card sm:col-span-2">
             <div className="text-sm font-medium text-ink-soft">Verteilung</div>
-            <p className="mt-1 text-xs text-ink-muted">Wie oft welche Gesamt-Sterne vergeben wurden</p>
+            <p className="mt-1 text-xs text-ink-muted">Wie oft welche Gesamtbewertung vergeben wurde</p>
             <div className="mt-5">
               {distribution.length > 0 ? (
                 <RatingDistribution values={distribution} />
@@ -164,7 +164,9 @@ export default async function ProfPage({
                   <li key={r.id} className="card">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-ink-soft">★ {r.ratings.insgesamt}/5</span>
+                        <span className="rounded-full bg-canvas-soft px-3 py-1 text-xs font-semibold text-ink-soft">
+                          Bewertung {r.ratings.insgesamt}/5
+                        </span>
                         <span className="text-xs text-ink-muted">
                           · Schwierigkeit {r.ratings.schwierigkeit}/5
                         </span>

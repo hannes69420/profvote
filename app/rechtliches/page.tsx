@@ -8,7 +8,7 @@ export default function RechtlichesPage() {
 
         <section>
           <h3 className="mb-3 text-base font-semibold text-ink-soft">Meinungsfreiheit und Rechtmäßigkeit der Plattform</h3>
-          <p>Der Betrieb dieser Bewertungsplattform ist rechtlich zulässig und basiert auf dem Grundrecht der Meinungsfreiheit gemäß Art. 5 Abs. 1 Grundgesetz (GG). Die Veröffentlichung von Bewertungen über Professor:innen stellt grundsätzlich eine zulässige Meinungsäußerung dar, sofern sie sich auf die berufliche Tätigkeit bezieht und nicht beleidigend oder unwahr ist.</p>
+          <p>Der Betrieb dieser Bewertungsplattform ist rechtlich zulässig und basiert auf dem Grundrecht der Meinungsfreiheit gemäß Art. 5 Abs. 1 Grundgesetz (GG). Die Veröffentlichung von Bewertungen über Professoren stellt grundsätzlich eine zulässige Meinungsäußerung dar, sofern sie sich auf die berufliche Tätigkeit bezieht und nicht beleidigend oder unwahr ist.</p>
           <p className="mt-3">Insbesondere hat der Bundesgerichtshof im sogenannten „Spickmich"-Urteil (BGH, Urteil vom 23.06.2009 – VI ZR 196/08) entschieden, dass Bewertungsplattformen für Lehrpersonen zulässig sind. Dabei wurde festgestellt, dass das öffentliche Interesse an Information und Transparenz die Persönlichkeitsrechte der bewerteten Personen überwiegen kann, solange die Bewertungen sachlich bleiben.</p>
           <p className="mt-3">Auch das allgemeine Persönlichkeitsrecht gemäß § 823 BGB steht der Veröffentlichung von Bewertungen nicht entgegen, sofern keine Schmähkritik, Beleidigung oder falsche Tatsachenbehauptungen vorliegen.</p>
           <p className="mt-3">Darüber hinaus ist die Bewertung von Lehrveranstaltungen ein anerkannter Bestandteil der Qualitätssicherung im Hochschulbereich und wird durch die Hochschulgesetze der Länder unterstützt.</p>
@@ -22,7 +22,7 @@ export default function RechtlichesPage() {
 
         <section>
           <h3 className="mb-3 text-base font-semibold text-ink-soft">Kontakt und Klärung von Anliegen</h3>
-          <p>Sollten Professor:innen oder andere betroffene Personen mit einer Bewertung nicht einverstanden sein oder Klärungsbedarf sehen, besteht jederzeit die Möglichkeit, uns über die angegebenen Kontaktmöglichkeiten zu erreichen. Wir nehmen solche Anliegen ernst und prüfen diese sorgfältig. Unser Ziel ist es, gemeinsam eine faire, transparente und angemessene Lösung zu finden.</p>
+          <p>Sollten Professoren oder andere betroffene Personen mit einer Bewertung nicht einverstanden sein oder Klärungsbedarf sehen, besteht jederzeit die Möglichkeit, uns über die angegebenen Kontaktmöglichkeiten zu erreichen. Wir nehmen solche Anliegen ernst und prüfen diese sorgfältig. Unser Ziel ist es, gemeinsam eine faire, transparente und angemessene Lösung zu finden.</p>
           <p className="mt-3">E-Mail: <a href="mailto:profvote-info@gmx.de" className="text-accent hover:underline">profvote-info@gmx.de</a></p>
         </section>
 

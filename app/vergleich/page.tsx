@@ -84,7 +84,7 @@ function Slot({
         <div className="text-xs font-medium uppercase tracking-wider text-ink-muted">
           Slot {side.toUpperCase()}
         </div>
-        <div className="mt-3 text-sm text-ink-muted">Such und wähl eine:n Prof:in.</div>
+        <div className="mt-3 text-sm text-ink-muted">Such und wähl einen Prof.</div>
         <div className="mt-4">
           <CompareSearchSlot side={side} otherRef={other ? `${other.uni.slug}/${other.prof.slug}` : undefined} initial={initialQuery} />
         </div>

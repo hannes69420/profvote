@@ -9,14 +9,14 @@ export const revalidate = 60;
 export const metadata = {
   metadataBase: new URL(process.env.APP_URL || 'http://localhost:3000'),
   title: {
-    default: 'ProfVote — Professor:innen anonym bewerten',
+    default: 'ProfVote — Professoren anonym bewerten',
     template: '%s · ProfVote',
   },
   description:
-    'Anonyme, verifizierte Bewertungen von Professor:innen an deutschen Universitäten. Stuttgart, KIT und mehr.',
+    'Anonyme, verifizierte Bewertungen von Professoren an deutschen Universitäten. Stuttgart, KIT und mehr.',
   openGraph: {
     title: 'ProfVote',
-    description: 'Anonyme Professor:innen-Bewertungen für deutsche Unis.',
+    description: 'Anonyme Professoren-Bewertungen für deutsche Unis.',
     type: 'website',
     locale: 'de_DE',
     siteName: 'ProfVote',

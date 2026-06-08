@@ -180,7 +180,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
               <div className="flex shrink-0 items-center gap-3 text-sm">
                 {p.avgOverall != null ? (
                   <span className="inline-flex items-center gap-1 rounded-full bg-canvas-soft px-3 py-1 font-medium text-ink-soft">
-                    ★ {p.avgOverall.toFixed(1)}
+                    {p.avgOverall.toFixed(1)}/5
                     {p.reviewCount != null && p.reviewCount > 0 && (
                       <span className="text-ink-muted">· {p.reviewCount}</span>
                     )}

@@ -181,7 +181,7 @@ export default function DatenschutzPage() {
             Für die Verwaltung und den Abruf bestimmter Plattforminhalte verwenden wir Wix
             Headless von Wix.com Ltd., 40 Namal Tel Aviv St., Tel Aviv 6350671, Israel.
             Wix dient hierbei nicht mehr als Hosting-Anbieter der Website, sondern als
-            Headless-CMS bzw. Datenquelle für Inhalte wie Professor:innen- und
+            Headless-CMS bzw. Datenquelle für Inhalte wie Professoren- und
             Bewertungsdaten.
           </p>
           <p className="mt-2">

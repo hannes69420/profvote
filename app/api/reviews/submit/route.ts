@@ -107,13 +107,13 @@ export async function POST(req: Request) {
   ) as Record<(typeof RATING_KEYS)[number], number>;
   for (const k of RATING_KEYS) {
     if (!Number.isFinite(ratings[k]) || ratings[k] < 1 || ratings[k] > 5) {
-      return NextResponse.json({ error: 'Bitte alle Sterne (1-5) bewerten.' }, { status: 400 });
+      return NextResponse.json({ error: 'Bitte alle Kategorien von 1 bis 5 bewerten.' }, { status: 400 });
     }
   }
 
   const prof = await getProfessorById(uni, body.professorId);
   if (!prof) {
-    return NextResponse.json({ error: 'Professor:in nicht gefunden' }, { status: 404 });
+    return NextResponse.json({ error: 'Professor nicht gefunden' }, { status: 404 });
   }
 
   let reviewId: string;

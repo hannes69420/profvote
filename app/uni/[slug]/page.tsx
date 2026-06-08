@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: PageParams }) {
   if (!uni) return { title: 'Universität nicht gefunden' };
   return {
     title: `${uni.shortName} — Profs bewerten`,
-    description: `Bewerte und such alle Professor:innen der ${uni.name} anonym. ${uni.shortDescription ?? ''}`.trim(),
+    description: `Bewerte und such alle Professoren der ${uni.name} anonym. ${uni.shortDescription ?? ''}`.trim(),
   };
 }
 
@@ -32,7 +32,7 @@ export default async function UniPage({ params }: { params: PageParams }) {
         </Link>
         <h1 className="mt-4">{uni.name}</h1>
         <p className="mt-6 max-w-2xl text-lg text-ink-muted">
-          Diese Uni ist noch in Vorbereitung. Wir füllen die Professor:innen-Liste in Kürze.
+          Diese Uni ist noch in Vorbereitung. Wir füllen die Professoren-Liste in Kürze.
         </p>
       </div>
     );
@@ -50,7 +50,7 @@ export default async function UniPage({ params }: { params: PageParams }) {
       </Link>
       <div className="mt-4 flex items-end justify-between gap-4">
         <h1>{uni.shortName}</h1>
-        <span className="pill">{profs.length} Professor:innen</span>
+        <span className="pill">{profs.length} Professoren</span>
       </div>
       <p className="mt-4 max-w-2xl text-lg text-ink-muted">{uni.name}</p>
 

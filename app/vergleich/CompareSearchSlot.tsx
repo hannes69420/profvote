@@ -58,7 +58,7 @@ export function CompareSearchSlot({
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Prof:in suchen…"
+        placeholder="Prof suchen…"
         className="w-full rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm
                    placeholder:text-ink-muted focus:border-ink-soft focus:outline-none
                    focus:ring-2 focus:ring-ink-soft/10"

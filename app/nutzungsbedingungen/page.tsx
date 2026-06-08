@@ -3,7 +3,7 @@ export const metadata = { title: 'Nutzungsbedingungen' };
 const SECTIONS = [
   {
     title: '1. Geltungsbereich',
-    content: 'Diese Nutzungsbedingungen regeln die Nutzung der Plattform profvote.de, auf der Studierende Bewertungen über Professoren abgeben können. Mit der Registrierung akzeptieren Nutzer diese Nutzungsbedingungen.',
+    content: 'Diese Nutzungsbedingungen regeln die Nutzung der Plattform profvote.de, auf der Studenten Bewertungen über Professoren abgeben können. Mit der Registrierung akzeptieren Nutzer diese Nutzungsbedingungen.',
   },
   {
     title: '2. Registrierung und Nutzerkonto',

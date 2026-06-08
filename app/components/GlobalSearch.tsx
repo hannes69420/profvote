@@ -108,7 +108,7 @@ export function GlobalSearch() {
           onFocus={() => setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onKeyDown={onKeyDown}
-          placeholder="Prof:in suchen…"
+          placeholder="Prof suchen…"
           className="w-44 rounded-full border border-neutral-200 bg-white/70 pl-9 pr-12 py-2 text-sm
                      placeholder:text-ink-muted backdrop-blur-md focus:w-72 focus:border-ink-soft/30
                      focus:outline-none focus:ring-2 focus:ring-ink-soft/10 transition-[width,border-color]
@@ -155,7 +155,7 @@ export function GlobalSearch() {
                     </div>
                     {h.avgOverall != null && (
                       <span className="shrink-0 text-sm font-medium text-ink-soft">
-                        ★ {h.avgOverall.toFixed(1)}
+                        {h.avgOverall.toFixed(1)}/5
                       </span>
                     )}
                   </button>

@@ -37,7 +37,7 @@ const Footer = () => (
             ProfVote
           </div>
           <p className="mt-3 max-w-xs text-sm text-ink-muted">
-            Anonyme, verifizierte Bewertungen von Professor:innen an deutschen Universitäten.
+            Anonyme, verifizierte Bewertungen von Professoren an deutschen Universitäten.
           </p>
           <p className="mt-4 text-xs text-ink-muted">Schätzle und Conrads Profvote GbR</p>
         </div>
@@ -69,7 +69,7 @@ const Footer = () => (
       >
         <p className="text-xs text-ink-muted">
           © {new Date().getFullYear()} Schätzle und Conrads Profvote GbR. Inhalte stammen
-          von Studierenden.
+          von Studenten.
         </p>
         <p className="text-xs text-ink-muted">
           Bewertungen sind Meinungsäußerungen gemäß BGH-Urteil VI ZR 196/08.

@@ -57,7 +57,7 @@ export default async function Home() {
         <div className="container-prose pt-20 pb-20 sm:pt-32 sm:pb-28">
           <p className="pill mb-6">Bewerten · Anonym · Verifiziert</p>
           <h1 className="max-w-3xl">
-            Wie ist dein:e
+            Wie ist dein
             <br />
             <span
               className="bg-clip-text text-transparent"
@@ -65,12 +65,12 @@ export default async function Home() {
                 backgroundImage: 'linear-gradient(120deg, #0071e3, #a855f7 60%, #10b981)',
               }}
             >
-              Prof:in
+              Prof
             </span>{' '}
             wirklich?
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-ink-muted sm:text-xl">
-            ProfVote sammelt anonyme Bewertungen von Studierenden - verifiziert per
+            ProfVote sammelt anonyme Bewertungen von Studenten - verifiziert per
             Uni-Email, sortiert nach Fakultät, in zwei Klicks abgegeben.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -83,7 +83,7 @@ export default async function Home() {
           </div>
 
           <dl className="mt-16 grid max-w-2xl grid-cols-3 gap-8">
-            <Stat label="Professor:innen" value={totalProfs.toLocaleString('de-DE')} />
+            <Stat label="Professoren" value={totalProfs.toLocaleString('de-DE')} />
             <Stat
               label="Universitäten"
               value={unis.filter((u) => u.available).length.toString()}
@@ -124,7 +124,7 @@ export default async function Home() {
       <section className="container-prose pb-20">
         <div className="mb-6 flex items-baseline justify-between">
           <h2>Beliebteste Profs</h2>
-          <span className="text-sm text-ink-muted">nach Sterne × Anzahl</span>
+          <span className="text-sm text-ink-muted">nach Bewertung × Anzahl</span>
         </div>
         {topProfs.length === 0 ? (
           <div className="card text-sm text-ink-muted">Noch zu wenig Daten.</div>
@@ -170,7 +170,7 @@ export default async function Home() {
                         </div>
                       </div>
                       <span className="shrink-0 rounded-full bg-canvas-soft px-3 py-1 text-sm font-medium text-ink-soft">
-                        ★ {r.ratings.insgesamt}/5
+                        {r.ratings.insgesamt}/5
                       </span>
                     </div>
                     {r.comment && (
@@ -190,12 +190,12 @@ export default async function Home() {
         <div className="mt-16 grid gap-4 sm:grid-cols-3">
           <HowCard
             step="1"
-            title="Such deine:n Prof:in"
-            body="Über 700 Lehrende aus Stuttgart und KIT - Suche, Sortierung und Fakultäts-Filter helfen."
+            title="Such deinen Prof"
+            body="Über 700 Professoren aus Stuttgart und KIT - Suche, Sortierung und Fakultäts-Filter helfen."
           />
           <HowCard
             step="2"
-            title="Sterne in 6 Kategorien"
+            title="Bewerten in 6 Kategorien"
             body="Vorlesung, Skript, Klausur, Organisation, Schwierigkeit, Gesamteindruck."
           />
           <HowCard
@@ -354,7 +354,7 @@ function TopProfCard({ prof, rank }: { prof: Professor; rank: number }) {
         </div>
         <div className="shrink-0 text-right">
           <div className="font-semibold text-ink-soft">
-            ★ {prof.avgOverall?.toFixed(1) ?? '–'}
+            {prof.avgOverall?.toFixed(1) ?? '–'}/5
           </div>
           <div className="text-xs text-ink-muted">{prof.reviewCount ?? 0} Reviews</div>
         </div>
