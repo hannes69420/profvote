@@ -8,7 +8,7 @@ import { RatingBars } from '@app/components/RatingBars';
 import { CompareSearchSlot } from './CompareSearchSlot';
 import type { AggregatedRatings, Professor, UniversitySlug } from '@app/lib/profvote/types';
 
-export const revalidate = 120;
+export const dynamic = 'force-dynamic';
 
 interface SP {
   a?: string;

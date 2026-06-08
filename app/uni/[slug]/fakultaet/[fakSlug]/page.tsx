@@ -5,7 +5,7 @@ import { listProfessorsByUni, slugify } from '@app/lib/profvote/professors';
 import { Avatar } from '@app/components/Avatar';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 type PageParams = Promise<{ slug: string; fakSlug: string }>;
 

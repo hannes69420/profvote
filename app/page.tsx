@@ -9,7 +9,7 @@ import { listRecentReviews, listReviewsByUni } from '@app/lib/profvote/reviews';
 import { Avatar } from '@app/components/Avatar';
 import type { Professor, University, UniversitySlug } from '@app/lib/profvote/types';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 type UniComparison = {
   university: University;

@@ -8,7 +8,7 @@ import { RatingRing } from '@app/components/RatingRing';
 import { RatingBars, RatingDistribution } from '@app/components/RatingBars';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
-export const revalidate = 120;
+export const dynamic = 'force-dynamic';
 
 type PageParams = Promise<{ uni: string; slug: string }>;
 

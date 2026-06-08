@@ -5,7 +5,7 @@ import { getProfessor } from '@app/lib/profvote/professors';
 import { ReviewForm } from './ReviewForm';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 type PageParams = Promise<{ uni: string; slug: string }>;
 
