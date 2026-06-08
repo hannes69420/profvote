@@ -24,12 +24,15 @@ function randomToken(): string {
 }
 
 function buildItemFields(uni: UniversitySlug, input: SubmitInput, token: string) {
+  const comment = input.comment?.trim() || '';
   const base: Record<string, unknown> = {
-    Kommentar: input.comment?.trim() || '',
+    Kommentar: comment,
     userEmail: input.email.trim().toLowerCase(),
     verificationToken: token,
     verified: false,
     deleteAfter: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+    // Comments need explicit admin approval before going public
+    commentApproved: comment ? false : true,
   };
   if (uni === 'stuttgart') {
     return {

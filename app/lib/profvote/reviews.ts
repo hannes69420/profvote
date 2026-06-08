@@ -50,7 +50,10 @@ function normalizeReview(uni: UniversitySlug, raw: Record<string, unknown>): Rev
     professorId,
     uni,
     createdAt: toIso(raw._createdDate),
-    comment: ((raw.Kommentar as string) || '').trim() || undefined,
+    // Only show comment if explicitly approved (null/undefined = legacy = show)
+    comment: raw.commentApproved === false
+      ? undefined
+      : (((raw.Kommentar as string) || '').trim() || undefined),
     ratings: getRatings(uni, raw),
     verified: raw.verified !== false,
   };

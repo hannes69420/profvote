@@ -61,6 +61,34 @@ export async function GET(req: Request) {
   return NextResponse.json({ reviews, total: reviews.length });
 }
 
+// PATCH /api/admin/reviews?secret=xxx&uni=stuttgart&id=xxx&approve=true|false
+export async function PATCH(req: Request) {
+  if (!checkAuth(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const url = new URL(req.url);
+  const uni = (url.searchParams.get('uni') || 'stuttgart') as UniversitySlug;
+  const id = url.searchParams.get('id');
+  const approve = url.searchParams.get('approve') === 'true';
+
+  if (!id) return NextResponse.json({ error: 'id fehlt' }, { status: 400 });
+
+  const collection = REVIEW_COLLECTION[uni];
+  if (!collection) return NextResponse.json({ error: 'Unbekannte Uni' }, { status: 400 });
+
+  try {
+    const wix = getAdminClient();
+    const existing = await wix.items.get(collection, id) as Record<string, unknown>;
+    if (!existing) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 });
+    await wix.items.update(collection, { ...existing, _id: id, commentApproved: approve });
+    return NextResponse.json({ ok: true, commentApproved: approve });
+  } catch (e) {
+    console.error('admin approve failed', e);
+    return NextResponse.json({ error: 'Fehler beim Aktualisieren' }, { status: 500 });
+  }
+}
+
 // DELETE /api/admin/reviews?secret=xxx&uni=stuttgart&id=xxx
 export async function DELETE(req: Request) {
   if (!checkAuth(req)) {
