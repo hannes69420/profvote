@@ -145,7 +145,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (e) {
-    console.error('verification email failed', e);
+    // Log full error server-side (visible in Vercel → Functions → Logs)
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error('verification email failed:', msg, e);
     return NextResponse.json({ error: getSafeEmailError(e) }, { status: 500 });
   }
 }
