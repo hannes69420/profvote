@@ -19,9 +19,9 @@ export function isAllowedEmail(uni: UniversitySlug, email: string): boolean {
 }
 
 function randomToken(): string {
-  const a = Math.random().toString(36).slice(2, 12);
-  const b = Date.now().toString(36);
-  return a + b;
+  // crypto.randomBytes is cryptographically secure (unlike Math.random)
+  const { randomBytes } = require('crypto') as typeof import('crypto');
+  return randomBytes(32).toString('hex');
 }
 
 function buildItemFields(uni: UniversitySlug, input: SubmitInput, token: string) {

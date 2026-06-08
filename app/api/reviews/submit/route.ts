@@ -16,8 +16,33 @@ interface Body {
 }
 
 const RATING_KEYS = ['insgesamt', 'vorlesung', 'skript', 'klausur', 'organisation', 'schwierigkeit'] as const;
+const MAX_COMMENT_LENGTH = 1000;
+
+// Simple in-memory rate limiter: max 3 submissions per IP per 10 minutes
+const submitLog = new Map<string, number[]>();
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const window = 10 * 60 * 1000; // 10 minutes
+  const maxRequests = 3;
+  const timestamps = (submitLog.get(ip) ?? []).filter((t) => now - t < window);
+  if (timestamps.length >= maxRequests) return true;
+  submitLog.set(ip, [...timestamps, now]);
+  return false;
+}
 
 export async function POST(req: Request) {
+  // Rate limiting: check IP from x-forwarded-for (Vercel sets this)
+  const ip =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    req.headers.get('x-real-ip') ??
+    'unknown';
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Zu viele Bewertungen in kurzer Zeit. Bitte warte 10 Minuten.' },
+      { status: 429 },
+    );
+  }
+
   let body: Body;
   try {
     body = await req.json();
@@ -38,6 +63,11 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
+  // Server-side comment length check (mirrors frontend maxLength={1000})
+  if (body.comment && body.comment.length > MAX_COMMENT_LENGTH) {
+    return NextResponse.json({ error: 'Kommentar zu lang (max. 1000 Zeichen).' }, { status: 400 });
+  }
+
   const ratings = Object.fromEntries(
     RATING_KEYS.map((k) => [k, Number(body.ratings?.[k] ?? 0)]),
   ) as Record<(typeof RATING_KEYS)[number], number>;

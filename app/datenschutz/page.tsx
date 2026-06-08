@@ -34,7 +34,7 @@ export default function DatenschutzPage() {
           </p>
         </Section>
 
-        <Section title="3. Registrierung und Nutzerkonto">
+        <Section title="3. Datenerhebung bei Nutzung der Plattform">
           <SubSection title="a) Beim Besuch der Website">
             <p>
               Beim Aufrufen unserer Website werden automatisch folgende Informationen
@@ -48,15 +48,18 @@ export default function DatenschutzPage() {
               Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO.
             </p>
           </SubSection>
-          <SubSection title="b) Registrierung und Nutzerkonto">
+          <SubSection title="b) Abgabe einer Bewertung">
             <p>
-              Für die Abgabe von Bewertungen ist eine Registrierung erforderlich. Dabei
-              erheben wir: Universitäts-E-Mail-Adresse, Passwort (verschlüsselt
-              gespeichert).
+              Für die Abgabe einer Bewertung ist <strong>keine Registrierung</strong>{' '}
+              erforderlich. Es wird ausschließlich die Universitäts-E-Mail-Adresse
+              erhoben, um die Zugehörigkeit zur jeweiligen Hochschule zu bestätigen.
+              Nach erfolgreicher Verifizierung per Bestätigungslink wird die E-Mail-Adresse
+              intern für Missbrauchsschutz und Moderationszwecke gespeichert und nicht
+              öffentlich angezeigt. Passwörter oder Nutzerkonten werden nicht angelegt.
             </p>
             <p className="mt-2">
-              Zwecke: Verifizierung der Zugehörigkeit zu einer Hochschule, Verhinderung
-              von Missbrauch. Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. b DSGVO.
+              Zwecke: Verifizierung der Hochschulzugehörigkeit, Verhinderung von Missbrauch.
+              Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO.
             </p>
           </SubSection>
           <SubSection title="c) Bewertungen und deren Veröffentlichung">
@@ -71,38 +74,79 @@ export default function DatenschutzPage() {
           </SubSection>
           <SubSection title="d) Speicherdauer">
             <p>
-              Die nutzerbezogenen Daten werden gelöscht, sobald Sie Ihr Nutzerkonto
-              löschen, sofern keine gesetzlichen Aufbewahrungspflichten bestehen. Bereits
-              abgegebene Bewertungen bleiben auch nach Löschung des Nutzerkontos weiterhin
-              sichtbar, da diese anonym veröffentlicht werden.
+              Unverifizierte Bewertungen (nicht per Link bestätigt) werden automatisch
+              nach 3 Tagen gelöscht. Verifizierte Bewertungen werden bis zur Löschung
+              durch den Betreiber oder auf Anfrage der betroffenen Person gespeichert,
+              sofern keine gesetzlichen Aufbewahrungspflichten bestehen. Die
+              E-Mail-Adresse wird intern mit der Bewertung gespeichert und nicht
+              öffentlich angezeigt. Eine Löschung der E-Mail-Adresse ist auf
+              schriftliche Anfrage an{' '}
+              <a href="mailto:profvote-info@gmx.de" className="text-accent hover:underline">
+                profvote-info@gmx.de
+              </a>{' '}
+              möglich.
             </p>
           </SubSection>
         </Section>
 
         <Section title="4. Cookies">
           <p>
-            Unsere Website verwendet Cookies zur Speicherung von Login-Informationen, zur
-            Sicherstellung der technischen Funktionalität sowie zur Verbesserung der
-            Benutzerfreundlichkeit.
+            Unsere Website verwendet technisch notwendige Cookies und ähnliche
+            Speichertechnologien (z. B. localStorage) zur Sicherstellung der
+            Funktionalität, Sicherheit und zur Speicherung Ihrer Cookie-Einwilligung.
+            Passwörter oder Kontozugänge werden nicht per Cookie verwaltet.
           </p>
           <p className="mt-2">
-            Technisch notwendige Cookies werden auf Grundlage von Art. 6 Abs. 1 Satz 1
-            lit. b und lit. f DSGVO verarbeitet. Weitere Cookies werden nur mit Ihrer
-            Einwilligung gemäß Art. 6 Abs. 1 Satz 1 lit. a DSGVO eingesetzt.
+            Technisch notwendige Cookies werden auf Grundlage von § 25 Abs. 2 TDDDG
+            sowie Art. 6 Abs. 1 Satz 1 lit. f DSGVO verarbeitet. Weitere Cookies werden
+            nur mit Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 Satz 1 lit. a
+            DSGVO eingesetzt.
           </p>
           <p className="mt-2">
-            Sie können die Speicherung von Cookies über Ihre Browser-Einstellungen
-            einschränken oder verhindern.
+            Sie können Ihre Cookie-Einwilligung jederzeit mit Wirkung für die Zukunft
+            über den Link „Cookie-Einstellungen" im Footer dieser Website oder über Ihre
+            Browser-Einstellungen ändern oder widerrufen.
           </p>
         </Section>
 
-        <Section title="5. Weitergabe von Daten">
+        <Section title="5. Weitergabe von Daten / Auftragsverarbeiter">
           <p>
             Eine Übermittlung Ihrer personenbezogenen Daten an Dritte findet nur statt,
-            wenn Sie ausdrücklich eingewilligt haben, die Weitergabe zur Geltendmachung
+            wenn Sie ausdrücklich eingewilligt haben, die Weitergabe zur Geltandmachung
             von Rechtsansprüchen erforderlich ist, eine gesetzliche Verpflichtung besteht
-            oder dies für die Abwicklung von Vertragsverhältnissen erforderlich ist.
+            oder dies für die Bereitstellung des Dienstes erforderlich ist.
           </p>
+          <p className="mt-2">
+            Wir setzen folgende Auftragsverarbeiter ein, an die ggf. personenbezogene
+            Daten übermittelt werden:
+          </p>
+          <ul className="mt-2 list-disc pl-5 space-y-2">
+            <li>
+              <span className="font-medium text-ink-soft">Brevo (Sendinblue SAS)</span>,
+              55 rue d'Amsterdam, 75008 Paris, Frankreich — für den Versand von
+              Verifizierungs-E-Mails. Dabei wird die angegebene E-Mail-Adresse an Brevo
+              übermittelt. Verarbeitung auf Grundlage von Art. 6 Abs. 1 Satz 1 lit. f
+              DSGVO. Brevo ist nach dem EU-US Data Privacy Framework zertifiziert; es
+              besteht ein Auftragsverarbeitungsvertrag. Datenschutzerklärung:{' '}
+              <a
+                href="https://www.brevo.com/legal/privacypolicy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                brevo.com/legal/privacypolicy
+              </a>
+            </li>
+            <li>
+              <span className="font-medium text-ink-soft">Vercel Inc.</span>, 440 N
+              Barranca Ave #4133, Covina, CA 91723, USA — Hosting (siehe Abschnitt 7).
+            </li>
+            <li>
+              <span className="font-medium text-ink-soft">Wix.com Ltd.</span>, 40 Namal
+              Tel Aviv St., Tel Aviv 6350671, Israel — Headless CMS / Datenbankdienst
+              (siehe Abschnitt 8).
+            </li>
+          </ul>
         </Section>
 
         <Section title="6. Ihre Rechte">
