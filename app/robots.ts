@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   const base = process.env.APP_URL || 'https://profvote.de';
   return {
     rules: [
-      { userAgent: '*', allow: '/', disallow: ['/api/', '/bewerten/'] },
+      { userAgent: '*', allow: '/', disallow: ['/api/', '/bewerten/', '/admin/'] },
     ],
     sitemap: `${base}/sitemap.xml`,
   };
