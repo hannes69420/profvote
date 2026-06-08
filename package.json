@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "debug": "NODE_OPTIONS='--inspect' next dev -p 3005",
-    "test": "yarn e2e",
-    "e2e": "yarn playwright test",
+    "test": "npm run e2e",
+    "e2e": "npx playwright test",
     "build": "next build",
     "start": "next start",
     "lint": "eslint app --fix"
@@ -38,5 +38,5 @@
     "tailwindcss": "^3.2.4",
     "typescript": "^6.0.3"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "npm@10.0.0"
 }
