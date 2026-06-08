@@ -13,7 +13,7 @@ const CATEGORIES: Array<{
   { key: 'skript', label: 'Skript', hint: 'Folien, Unterlagen' },
   { key: 'klausur', label: 'Klausur', hint: 'Fairness & Vorbereitung' },
   { key: 'organisation', label: 'Organisation', hint: 'Termine, Klausur-Anmeldung' },
-  { key: 'schwierigkeit', label: 'Schwierigkeit', hint: '1 = leicht, 5 = sehr schwer' },
+  { key: 'schwierigkeit', label: 'Schwierigkeit', hint: '1 = schwer, 5 = leicht' },
 ];
 
 interface Props {
@@ -88,7 +88,8 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
               <div className="text-sm font-medium text-ink-soft">{cat.label}</div>
               {cat.hint && <div className="text-xs text-ink-muted">{cat.hint}</div>}
             </div>
-            <RatingPicker
+            <StarPicker
+              categoryKey={cat.key}
               value={ratings[cat.key] || 0}
               onChange={(v) => setRatings((r) => ({ ...r, [cat.key]: v }))}
             />
@@ -147,28 +148,45 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
   );
 }
 
-function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+function StarPicker({
+  categoryKey,
+  value,
+  onChange,
+}: {
+  categoryKey: (typeof CATEGORIES)[number]['key'];
+  value: number;
+  onChange: (v: number) => void;
+}) {
   const [hover, setHover] = useState(0);
   const active = hover || value;
+  const lowLabel = categoryKey === 'schwierigkeit' ? 'schwer' : 'schwach';
+  const highLabel = categoryKey === 'schwierigkeit' ? 'leicht' : 'stark';
+
   return (
-    <div className="flex items-center gap-1.5" onMouseLeave={() => setHover(0)}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <button
-          key={n}
-          type="button"
-          onClick={() => onChange(n)}
-          onMouseEnter={() => setHover(n)}
-          aria-label={`Bewertung ${n} von 5`}
-          className={`grid h-9 w-9 place-items-center rounded-full border text-sm font-semibold transition-all
-                      ${
-                        n <= active
-                          ? 'border-ink-soft bg-ink-soft text-white shadow-sm'
-                          : 'border-neutral-200 bg-white text-ink-muted hover:border-ink-soft/30 hover:text-ink-soft'
-                      }`}
-        >
-          {n}
-        </button>
-      ))}
+    <div className="w-full sm:w-auto" onMouseLeave={() => setHover(0)}>
+      <div className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-canvas-soft/70 p-1">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            onMouseEnter={() => setHover(n)}
+            aria-label={`Bewertung ${n} von 5`}
+            className={`grid h-9 w-9 place-items-center rounded-full text-lg leading-none transition-all
+                        ${
+                          n <= active
+                            ? 'bg-white text-ink-soft shadow-sm ring-1 ring-ink-soft/10'
+                            : 'text-ink-muted/35 hover:bg-white/70 hover:text-ink-soft'
+                        }`}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+      <div className="mt-1 flex justify-between px-2 text-[11px] text-ink-muted">
+        <span>1 {lowLabel}</span>
+        <span>5 {highLabel}</span>
+      </div>
     </div>
   );
 }
