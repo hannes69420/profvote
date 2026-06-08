@@ -84,6 +84,9 @@ export async function getProfessorById(uniSlug: UniversitySlug, id: string): Pro
     const raw = res.items?.[0] as Record<string, unknown> | undefined;
     return raw ? normalizeProf(uniSlug, raw) : null;
   } catch {
+    if (process.env.NODE_ENV !== 'production') {
+      return DEMO_PROFESSORS.find((p) => p.uni === uniSlug && p.id === id) ?? null;
+    }
     return null;
   }
 }

@@ -15,23 +15,54 @@ interface Body {
   comment?: string;
 }
 
-const RATING_KEYS = ['insgesamt', 'vorlesung', 'skript', 'klausur', 'organisation', 'schwierigkeit'] as const;
+const RATING_KEYS = [
+  'insgesamt',
+  'vorlesung',
+  'skript',
+  'klausur',
+  'organisation',
+  'schwierigkeit',
+] as const;
 const MAX_COMMENT_LENGTH = 1000;
 
-// Simple in-memory rate limiter: max 3 submissions per IP per 10 minutes
+function getSafeSubmitError(error: unknown) {
+  const message = error instanceof Error ? error.message : '';
+  if (message.includes('WIX_API_KEY') || message.includes('WIX_SITE_ID')) {
+    return process.env.NODE_ENV === 'production'
+      ? 'Die Bewertungsfunktion ist gerade nicht vollständig konfiguriert.'
+      : 'Server-Konfiguration fehlt: WIX_API_KEY und WIX_SITE_ID müssen gesetzt sein.';
+  }
+  return 'Konnte Bewertung nicht speichern. Bitte später erneut versuchen.';
+}
+
+function getSafeEmailError(error: unknown) {
+  const message = error instanceof Error ? error.message : '';
+  if (message.includes('BREVO_API_KEY')) {
+    return process.env.NODE_ENV === 'production'
+      ? 'Die Bestätigungs-Mail konnte gerade nicht versendet werden.'
+      : 'Server-Konfiguration fehlt: BREVO_API_KEY muss gesetzt sein.';
+  }
+  if (message.includes('Brevo error')) {
+    return process.env.NODE_ENV === 'production'
+      ? 'Die Bestätigungs-Mail konnte gerade nicht versendet werden.'
+      : message;
+  }
+  return 'Die Bestätigungs-Mail konnte gerade nicht versendet werden.';
+}
+
 const submitLog = new Map<string, number[]>();
+
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const window = 10 * 60 * 1000; // 10 minutes
+  const windowMs = 10 * 60 * 1000;
   const maxRequests = 3;
-  const timestamps = (submitLog.get(ip) ?? []).filter((t) => now - t < window);
+  const timestamps = (submitLog.get(ip) ?? []).filter((t) => now - t < windowMs);
   if (timestamps.length >= maxRequests) return true;
   submitLog.set(ip, [...timestamps, now]);
   return false;
 }
 
 export async function POST(req: Request) {
-  // Rate limiting: check IP from x-forwarded-for (Vercel sets this)
   const ip =
     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     req.headers.get('x-real-ip') ??
@@ -59,11 +90,14 @@ export async function POST(req: Request) {
   }
   if (!body.email || !isAllowedEmail(uni, body.email)) {
     return NextResponse.json(
-      { error: `Bitte eine Uni-Email-Adresse benutzen (${UNI_CONFIG[uni].emailDomains.join(' oder ')}).` },
+      {
+        error: `Bitte eine Uni-Email-Adresse benutzen (${UNI_CONFIG[uni].emailDomains.join(
+          ' oder ',
+        )}).`,
+      },
       { status: 400 },
     );
   }
-  // Server-side comment length check (mirrors frontend maxLength={1000})
   if (body.comment && body.comment.length > MAX_COMMENT_LENGTH) {
     return NextResponse.json({ error: 'Kommentar zu lang (max. 1000 Zeichen).' }, { status: 400 });
   }
@@ -73,7 +107,7 @@ export async function POST(req: Request) {
   ) as Record<(typeof RATING_KEYS)[number], number>;
   for (const k of RATING_KEYS) {
     if (!Number.isFinite(ratings[k]) || ratings[k] < 1 || ratings[k] > 5) {
-      return NextResponse.json({ error: `Bitte alle Sterne (1–5) bewerten.` }, { status: 400 });
+      return NextResponse.json({ error: 'Bitte alle Sterne (1-5) bewerten.' }, { status: 400 });
     }
   }
 
@@ -82,17 +116,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Professor:in nicht gefunden' }, { status: 404 });
   }
 
+  let reviewId: string;
+  let token: string;
   try {
-    const { reviewId, token } = await submitReview({
+    ({ reviewId, token } = await submitReview({
       uni,
       professorId: body.professorId,
       email: body.email,
       ratings,
       comment: body.comment,
-    });
+    }));
+  } catch (e) {
+    console.error('submit failed', e);
+    return NextResponse.json({ error: getSafeSubmitError(e) }, { status: 500 });
+  }
 
+  try {
     const appUrl = process.env.APP_URL || new URL(req.url).origin;
-    const verifyUrl = `${appUrl}/api/reviews/verify?id=${encodeURIComponent(reviewId)}&uni=${uni}&token=${encodeURIComponent(token)}`;
+    const verifyUrl = `${appUrl}/api/reviews/verify?id=${encodeURIComponent(
+      reviewId,
+    )}&uni=${uni}&token=${encodeURIComponent(token)}`;
 
     await sendVerificationEmail({
       to: body.email,
@@ -102,10 +145,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (e) {
-    console.error('submit failed', e);
-    return NextResponse.json(
-      { error: 'Konnte Bewertung nicht speichern. Bitte später erneut versuchen.' },
-      { status: 500 },
-    );
+    console.error('verification email failed', e);
+    return NextResponse.json({ error: getSafeEmailError(e) }, { status: 500 });
   }
 }
