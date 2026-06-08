@@ -160,7 +160,9 @@ export default async function Home() {
                     <div className="flex items-center gap-3">
                       <Avatar name={prof.name} size={40} />
                       <div className="min-w-0 flex-1">
-                        <div className="truncate font-medium text-ink-soft">{prof.name}</div>
+                        <div className="break-words font-medium leading-snug text-ink-soft">
+                          {prof.name}
+                        </div>
                         <div className="text-xs text-ink-muted">
                           {UNI_CONFIG[r.uni].shortName} ·{' '}
                           {new Date(r.createdAt).toLocaleDateString('de-DE', {
@@ -249,8 +251,10 @@ function UniComparisonCard({
   return (
     <Link
       href={`/uni/${university.slug}`}
-      className={`group block h-full rounded-[1.75rem] border p-6 transition-all hover:-translate-y-0.5 hover:shadow-card ${
-        isWinner ? 'border-ink-soft bg-ink-soft text-white' : 'bg-white'
+      className={`group block h-full rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-card sm:rounded-[1.75rem] sm:p-6 ${
+        isWinner
+          ? 'border-accent bg-[#eef6ff] ring-2 ring-accent/20 dark:bg-[#162238] dark:ring-[#6aa8ff]/30'
+          : 'bg-white'
       }`}
       style={{ borderColor: isWinner ? undefined : 'rgb(var(--border))' }}
     >
@@ -258,15 +262,15 @@ function UniComparisonCard({
         <div>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className={`text-sm font-medium ${isWinner ? 'text-white/70' : 'text-ink-muted'}`}>
+              <p className="text-sm font-medium text-ink-muted">
                 {university.shortName}
               </p>
-              <h3 className={`mt-2 text-2xl sm:text-3xl ${isWinner ? 'text-white' : ''}`}>
+              <h3 className="mt-2 text-2xl text-ink-soft sm:text-3xl">
                 {university.name}
               </h3>
             </div>
             {isWinner && !isTie && (
-              <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink-soft">
+              <span className="shrink-0 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
                 Aktuell besser bewertet
               </span>
             )}
@@ -283,28 +287,26 @@ function UniComparisonCard({
             <>
               <div className="flex items-end gap-3">
                 <div
-                  className={`font-display text-6xl font-semibold leading-none tracking-tightest sm:text-7xl ${
-                    isWinner ? 'text-white' : 'text-ink-soft'
-                  }`}
+                  className="font-display text-5xl font-semibold leading-none tracking-tightest text-ink-soft sm:text-7xl"
                 >
                   {average.toFixed(1)}
                 </div>
-                <div className={`pb-2 text-lg font-medium ${isWinner ? 'text-white/70' : 'text-ink-muted'}`}>
+                <div className="pb-2 text-lg font-medium text-ink-muted">
                   /5
                 </div>
               </div>
-              <StarRating value={average} isWinner={isWinner} />
-              <p className={`mt-4 text-sm ${isWinner ? 'text-white/70' : 'text-ink-muted'}`}>
+              <StarRating value={average} />
+              <p className="mt-4 text-sm text-ink-muted">
                 {reviewCount.toLocaleString('de-DE')}{' '}
                 {reviewCount === 1 ? 'Bewertung' : 'Bewertungen'}
               </p>
             </>
           ) : (
             <div>
-              <p className={`text-2xl font-semibold ${isWinner ? 'text-white' : 'text-ink-soft'}`}>
+              <p className="text-xl font-semibold text-ink-soft sm:text-2xl">
                 Noch keine Bewertungen
               </p>
-              <p className={`mt-3 text-sm ${isWinner ? 'text-white/70' : 'text-ink-muted'}`}>
+              <p className="mt-3 text-sm text-ink-muted">
                 Sobald Bewertungen vorliegen, erscheint hier die durchschnittliche
                 Gesamtbewertung.
               </p>
@@ -316,14 +318,14 @@ function UniComparisonCard({
   );
 }
 
-function StarRating({ value, isWinner }: { value: number; isWinner: boolean }) {
+function StarRating({ value }: { value: number }) {
   const rounded = Math.round(value);
   return (
     <div className="mt-4 flex gap-1" aria-label={`${value.toFixed(1)} von 5 Sternen`}>
       {[1, 2, 3, 4, 5].map((star) => (
         <span
           key={star}
-          className={`text-2xl ${star <= rounded ? (isWinner ? 'text-white' : 'text-ink-soft') : 'text-ink-muted/30'}`}
+          className={`text-2xl ${star <= rounded ? 'text-ink-soft' : 'text-ink-muted/30'}`}
           aria-hidden
         >
           ★
@@ -346,8 +348,8 @@ function TopProfCard({ prof, rank }: { prof: Professor; rank: number }) {
         </div>
         <Avatar name={prof.name} size={40} />
         <div className="min-w-0 flex-1">
-          <div className="truncate font-medium text-ink-soft">{prof.name}</div>
-          <div className="truncate text-xs text-ink-muted">
+          <div className="break-words font-medium leading-snug text-ink-soft">{prof.name}</div>
+          <div className="break-words text-xs leading-snug text-ink-muted">
             {uni.shortName}
             {prof.faculty ? ` · ${prof.faculty}` : ''}
           </div>

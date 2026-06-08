@@ -112,16 +112,16 @@ export function CookieConsent() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-4 py-4 backdrop-blur-sm sm:items-center sm:py-8">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden bg-black/45 p-2 backdrop-blur-sm sm:items-center sm:p-8">
       <div
-        className="w-full max-w-2xl overflow-hidden border bg-white shadow-[0_24px_80px_rgba(0,0,0,0.26)] dark:bg-neutral-950"
+        className="max-h-[calc(100dvh-1rem)] w-full max-w-[calc(100vw-1rem)] overflow-hidden border bg-white shadow-[0_24px_80px_rgba(0,0,0,0.26)] sm:max-w-2xl"
         style={{ borderColor: 'rgb(var(--border))', borderRadius: '1.25rem' }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cookie-title"
       >
-        <div className="max-h-[92vh] overflow-y-auto">
-          <div className="px-5 pb-4 pt-5 sm:px-7 sm:pt-6">
+        <div className="max-h-[calc(100dvh-1rem)] overflow-y-auto">
+          <div className="px-4 pb-3 pt-4 sm:px-7 sm:pt-6">
             <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
               Datenschutz & Cookies
             </p>
@@ -129,7 +129,7 @@ export function CookieConsent() {
               Cookie-Einstellungen
             </h2>
 
-            <div className="mt-5 space-y-3 text-sm leading-relaxed text-ink-muted">
+            <div className="mt-4 space-y-2.5 text-sm leading-relaxed text-ink-muted sm:mt-5 sm:space-y-3">
               <p>
                 Wir verwenden technisch notwendige Cookies und ähnliche
                 Speichertechnologien, damit ProfVote sicher, stabil und zuverlässig
@@ -143,7 +143,7 @@ export function CookieConsent() {
             </div>
           </div>
 
-          <div className="px-5 sm:px-7">
+          <div className="px-4 sm:px-7">
             <div className="border-t pt-4" style={{ borderColor: 'rgb(var(--border))' }}>
               <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
                 <h3 className="text-base font-semibold leading-tight text-ink-soft">
@@ -151,7 +151,7 @@ export function CookieConsent() {
                 </h3>
                 <p className="text-sm font-medium text-ink-muted">Immer aktiv</p>
               </div>
-              <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink-muted">
+              <div className="mt-3 space-y-2.5 text-sm leading-relaxed text-ink-muted sm:space-y-3">
                 <p>
                   Diese Cookies sind erforderlich, um die grundlegenden Funktionen der
                   Website bereitzustellen, die Sicherheit zu gewährleisten, Missbrauch zu
@@ -175,7 +175,7 @@ export function CookieConsent() {
             </div>
           </div>
 
-          <div className="px-5 pt-4 sm:px-7">
+          <div className="px-4 pt-3 sm:px-7 sm:pt-4">
             <button
               type="button"
               className="text-sm font-medium text-ink-soft underline-offset-4 hover:underline"
@@ -186,11 +186,11 @@ export function CookieConsent() {
           </div>
 
           {showSettings && (
-            <div className="mt-3 space-y-3 px-5 sm:px-7">
+            <div className="mt-3 space-y-3 px-4 sm:px-7">
               {OPTIONAL_CATEGORIES.map((category) => (
                 <div
                   key={category.key}
-                  className="border px-4 py-4"
+                  className="border px-3 py-3 sm:px-4 sm:py-4"
                   style={{ borderColor: 'rgb(var(--border))', borderRadius: '1rem' }}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -223,7 +223,7 @@ export function CookieConsent() {
             </div>
           )}
 
-          <div className="mt-5 border-t px-5 py-4 sm:px-7" style={{ borderColor: 'rgb(var(--border))' }}>
+          <div className="mt-4 border-t px-4 py-3 sm:mt-5 sm:px-7 sm:py-4" style={{ borderColor: 'rgb(var(--border))' }}>
             <div className="grid gap-2 sm:grid-cols-2">
               <button
                 type="button"

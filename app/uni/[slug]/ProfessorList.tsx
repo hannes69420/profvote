@@ -172,9 +172,11 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
             >
               <Avatar name={p.name} size={40} />
               <div className="min-w-0 flex-1">
-                <div className="truncate font-medium text-ink-soft">{p.name}</div>
+                <div className="break-words font-medium leading-snug text-ink-soft">{p.name}</div>
                 {p.faculty && (
-                  <div className="mt-0.5 truncate text-sm text-ink-muted">{p.faculty}</div>
+                  <div className="mt-0.5 break-words text-sm leading-snug text-ink-muted">
+                    {p.faculty}
+                  </div>
                 )}
               </div>
               <div className="flex shrink-0 items-center gap-2 text-sm sm:gap-3">

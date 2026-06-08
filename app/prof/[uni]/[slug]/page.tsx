@@ -5,7 +5,7 @@ import { getProfessor, slugify } from '@app/lib/profvote/professors';
 import { aggregate, listReviewsForProfessor } from '@app/lib/profvote/reviews';
 import { Avatar } from '@app/components/Avatar';
 import { RatingRing } from '@app/components/RatingRing';
-import { RatingBars, RatingDistribution } from '@app/components/RatingBars';
+import { RatingBars } from '@app/components/RatingBars';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const dynamic = 'force-dynamic';
@@ -44,7 +44,6 @@ export default async function ProfPage({
 
   const reviews = await listReviewsForProfessor(uni.slug as UniversitySlug, prof.id);
   const stats = aggregate(reviews);
-  const distribution = reviews.map((r) => r.ratings.insgesamt);
   const withText = reviews.filter((r) => r.comment);
 
   return (
@@ -125,21 +124,8 @@ export default async function ProfPage({
           </div>
         </section>
 
-        {/* Distribution + Comments */}
-        <section className="mt-6 grid gap-6 sm:grid-cols-5">
-          <div className="card sm:col-span-2">
-            <div className="text-sm font-medium text-ink-soft">Verteilung</div>
-            <p className="mt-1 text-xs text-ink-muted">Wie oft welche Gesamtbewertung vergeben wurde</p>
-            <div className="mt-5">
-              {distribution.length > 0 ? (
-                <RatingDistribution values={distribution} />
-              ) : (
-                <EmptyStateMini />
-              )}
-            </div>
-          </div>
-
-          <div className="sm:col-span-3">
+        <section className="mt-6">
+          <div>
             <div className="mb-3 flex items-baseline justify-between">
               <h2>Kommentare</h2>
               <span className="text-sm text-ink-muted">
@@ -187,21 +173,6 @@ export default async function ProfPage({
         </section>
       </div>
     </>
-  );
-}
-
-function EmptyStateMini() {
-  return (
-    <div className="flex flex-col items-center gap-3 py-6 text-center">
-      <svg width="64" height="40" viewBox="0 0 64 40" fill="none" aria-hidden>
-        <rect x="2" y="22" width="8" height="14" rx="2" fill="#E5E5EA" />
-        <rect x="14" y="14" width="8" height="22" rx="2" fill="#E5E5EA" />
-        <rect x="26" y="6" width="8" height="30" rx="2" fill="#D2D2D7" />
-        <rect x="38" y="18" width="8" height="18" rx="2" fill="#E5E5EA" />
-        <rect x="50" y="26" width="8" height="10" rx="2" fill="#E5E5EA" />
-      </svg>
-      <p className="text-xs text-ink-muted">Noch keine Daten</p>
-    </div>
   );
 }
 
