@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { CookieSettingsLink } from './CookieSettingsLink';
+import { AdminLoginLink } from './AdminLoginLink';
 
 const LINKS = [
   {
@@ -74,7 +75,10 @@ const Footer = () => (
         <p className="text-xs text-ink-muted">
           Bewertungen sind Meinungsäußerungen gemäß BGH-Urteil VI ZR 196/08.
         </p>
-        <CookieSettingsLink />
+        <div className="flex items-center gap-4">
+          <CookieSettingsLink />
+          <AdminLoginLink />
+        </div>
       </div>
     </div>
   </footer>
