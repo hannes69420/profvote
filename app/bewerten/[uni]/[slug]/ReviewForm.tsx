@@ -123,7 +123,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
           type="email"
           required
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.trim())}
           placeholder={`st123456@${allowedDomains[0]}`}
           className="mt-3 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm
                      placeholder:text-ink-muted focus:border-ink-soft focus:outline-none
