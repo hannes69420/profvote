@@ -7,7 +7,7 @@ const Header = () => (
     className="sticky top-0 z-40 border-b backdrop-blur-md"
     style={{ background: 'rgb(var(--bg) / 0.8)', borderColor: 'rgb(var(--border))' }}
   >
-    <div className="container-prose flex h-14 items-center justify-between gap-4">
+    <div className="container-prose flex h-14 items-center justify-between gap-2 sm:gap-4">
       <Link href="/" className="shrink-0 font-display text-lg font-semibold tracking-tightest text-ink-soft">
         ProfVote
       </Link>
@@ -22,7 +22,7 @@ const Header = () => (
           Vergleich
         </Link>
       </nav>
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
         <GlobalSearch />
         <ThemeToggle />
       </div>

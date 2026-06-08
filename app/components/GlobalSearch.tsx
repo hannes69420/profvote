@@ -109,10 +109,10 @@ export function GlobalSearch() {
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onKeyDown={onKeyDown}
           placeholder="Prof suchen…"
-          className="w-44 rounded-full border border-neutral-200 bg-white/70 pl-9 pr-12 py-2 text-sm
-                     placeholder:text-ink-muted backdrop-blur-md focus:w-72 focus:border-ink-soft/30
+          className="w-32 rounded-full border border-neutral-200 bg-white/70 pl-9 pr-10 py-2 text-sm
+                     placeholder:text-ink-muted backdrop-blur-md focus:w-48 focus:border-ink-soft/30
                      focus:outline-none focus:ring-2 focus:ring-ink-soft/10 transition-[width,border-color]
-                     duration-200 sm:w-56 sm:focus:w-80"
+                     duration-200 sm:w-56 sm:pr-12 sm:focus:w-80"
         />
         <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline
                         rounded border border-neutral-200 bg-canvas-soft px-1.5 py-0.5 text-[10px]

@@ -84,7 +84,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
         <div className="search-hero group relative">
           <svg
             aria-hidden
-            className="pointer-events-none absolute left-7 top-1/2 h-7 w-7 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-ink-soft"
+            className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-ink-soft sm:left-7 sm:h-7 sm:w-7"
             viewBox="0 0 20 20" fill="none"
           >
             <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
@@ -96,9 +96,9 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
             onChange={(e) => setQ(e.target.value)}
             placeholder="Nach Name oder Fakultät suchen…"
             autoFocus
-            className="w-full rounded-[1.75rem] border bg-white pl-20 pr-20 py-7 text-2xl
+            className="w-full rounded-2xl border bg-white py-4 pl-12 pr-12 text-base
                        font-medium tracking-tightest placeholder:font-normal placeholder:text-ink-muted
-                       focus:outline-none"
+                       focus:outline-none sm:rounded-[1.75rem] sm:py-7 sm:pl-20 sm:pr-20 sm:text-2xl"
             style={{ borderColor: 'rgb(var(--border))' }}
           />
           {q && (
@@ -106,7 +106,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
               type="button"
               onClick={() => setQ('')}
               aria-label="Suche leeren"
-              className="absolute right-6 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-canvas-soft text-lg text-ink-muted transition-colors hover:bg-ink-soft/10 hover:text-ink-soft"
+              className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-canvas-soft text-lg text-ink-muted transition-colors hover:bg-ink-soft/10 hover:text-ink-soft sm:right-6 sm:h-9 sm:w-9"
             >
               ×
             </button>
@@ -160,7 +160,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
         )}
       </div>
 
-      <ul className="mt-4 divide-y divide-neutral-200/70 rounded-3xl bg-white shadow-card">
+      <ul className="mt-4 min-w-0 divide-y divide-neutral-200/70 rounded-2xl bg-white shadow-card sm:rounded-3xl">
         {filtered.length === 0 && (
           <li className="px-6 py-6 text-sm text-ink-muted">Keine Treffer.</li>
         )}
@@ -168,7 +168,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
           <li key={p.id}>
             <Link
               href={`/prof/${uniSlug}/${p.slug}`}
-              className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-canvas-soft"
+              className="flex min-w-0 items-center gap-3 px-4 py-3 transition-colors hover:bg-canvas-soft sm:gap-4 sm:px-5 sm:py-3.5"
             >
               <Avatar name={p.name} size={40} />
               <div className="min-w-0 flex-1">
@@ -177,7 +177,7 @@ export function ProfessorList({ professors, faculties, uniSlug }: Props) {
                   <div className="mt-0.5 truncate text-sm text-ink-muted">{p.faculty}</div>
                 )}
               </div>
-              <div className="flex shrink-0 items-center gap-3 text-sm">
+              <div className="flex shrink-0 items-center gap-2 text-sm sm:gap-3">
                 {p.avgOverall != null ? (
                   <span className="inline-flex items-center gap-1 rounded-full bg-canvas-soft px-3 py-1 font-medium text-ink-soft">
                     {p.avgOverall.toFixed(1)}/5

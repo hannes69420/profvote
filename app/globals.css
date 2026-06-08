@@ -14,14 +14,14 @@
     --card-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
   }
   .dark, :root.dark {
-    --bg: 0 0 0;
-    --bg-soft: 22 22 24;
-    --ink: 245 245 247;
-    --ink-soft: 245 245 247;
-    --ink-muted: 152 152 157;
-    --border: 50 50 55;
-    --card-bg: 28 28 30;
-    --card-shadow: 0 1px 2px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.25);
+    --bg: 12 13 17;
+    --bg-soft: 25 27 34;
+    --ink: 242 242 245;
+    --ink-soft: 250 250 252;
+    --ink-muted: 166 170 181;
+    --border: 58 62 74;
+    --card-bg: 20 22 29;
+    --card-shadow: 0 1px 2px rgba(0,0,0,0.32), 0 14px 34px -24px rgba(0,0,0,0.75);
   }
   html, body {
     background: rgb(var(--bg));
@@ -34,18 +34,18 @@
     @apply font-display tracking-tightest;
     color: rgb(var(--ink-soft));
   }
-  h1 { @apply text-5xl sm:text-6xl font-semibold leading-[1.05]; }
-  h2 { @apply text-3xl sm:text-4xl font-semibold leading-tight; }
-  h3 { @apply text-xl sm:text-2xl font-semibold; }
+  h1 { @apply text-4xl sm:text-6xl font-semibold leading-[1.05]; }
+  h2 { @apply text-2xl sm:text-4xl font-semibold leading-tight; }
+  h3 { @apply text-lg sm:text-2xl font-semibold; }
   a { @apply text-inherit no-underline; }
   * { box-sizing: border-box; }
 }
 
 @layer components {
-  .container-prose { @apply mx-auto max-w-6xl px-6 sm:px-8; }
+  .container-prose { @apply mx-auto max-w-6xl px-4 sm:px-8; }
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full px-6 py-3
-           text-sm font-medium transition-colors duration-150
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5
+           text-sm font-medium transition-colors duration-150 sm:px-6 sm:py-3
            focus:outline-none focus:ring-2 focus:ring-offset-2;
     background: rgb(var(--ink-soft));
     color: rgb(var(--bg));
@@ -53,8 +53,8 @@
   }
   .btn-primary:hover { opacity: 0.9; }
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full px-6 py-3
-           text-sm font-medium transition-colors duration-150
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5
+           text-sm font-medium transition-colors duration-150 sm:px-6 sm:py-3
            focus:outline-none focus:ring-2 focus:ring-offset-2;
     background: rgb(var(--bg-soft));
     color: rgb(var(--ink-soft));
@@ -62,7 +62,7 @@
   .btn-secondary:hover { filter: brightness(0.96); }
   .btn-cta {
     @apply inline-flex items-center justify-center gap-2 rounded-full
-           px-8 py-4 text-base font-semibold tracking-tightest
+           px-6 py-3 text-sm font-semibold tracking-tightest sm:px-8 sm:py-4 sm:text-base
            transition-all duration-200
            focus:outline-none focus:ring-2 focus:ring-offset-2;
     background: linear-gradient(135deg, #0071e3 0%, #4f46e5 100%);
@@ -76,8 +76,8 @@
   }
   .btn-cta:active { transform: translateY(0); }
   .btn-ghost-lg {
-    @apply inline-flex items-center justify-center rounded-full px-7 py-4
-           text-base font-medium transition-colors duration-150
+    @apply inline-flex items-center justify-center rounded-full px-5 py-3
+           text-sm font-medium transition-colors duration-150 sm:px-7 sm:py-4 sm:text-base
            focus:outline-none focus:ring-2 focus:ring-offset-2;
     background: rgb(var(--bg-soft));
     color: rgb(var(--ink-soft));
@@ -86,7 +86,7 @@
   .card {
     background: rgb(var(--card-bg));
     box-shadow: var(--card-shadow);
-    @apply rounded-3xl p-6 transition-colors duration-150;
+    @apply rounded-2xl p-4 transition-colors duration-150 sm:rounded-3xl sm:p-6;
   }
   .pill {
     background: rgb(var(--bg-soft));
@@ -106,4 +106,16 @@
     transform: translateY(-1px);
   }
   .search-hero:focus-within > input { border-color: rgb(var(--ink-soft) / 0.3); }
+}
+
+@layer utilities {
+  .dark .bg-white { background-color: rgb(var(--card-bg)); }
+  .dark .bg-white\/70 { background-color: rgb(var(--card-bg) / 0.78); }
+  .dark .bg-white\/95 { background-color: rgb(var(--card-bg) / 0.95); }
+  .dark .border-neutral-200,
+  .dark .border-neutral-200\/70 { border-color: rgb(var(--border)); }
+  .dark .divide-neutral-200\/70 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--border) / 0.75);
+  }
+  .dark .text-neutral-300 { color: rgb(var(--ink-muted) / 0.52); }
 }

@@ -54,7 +54,7 @@ export default async function Home() {
               'radial-gradient(700px 320px at 15% 10%, rgba(0,113,227,0.12), transparent 60%), radial-gradient(800px 350px at 90% 0%, rgba(168,85,247,0.10), transparent 60%), radial-gradient(600px 280px at 50% 100%, rgba(16,185,129,0.08), transparent 60%)',
           }}
         />
-        <div className="container-prose pt-20 pb-20 sm:pt-32 sm:pb-28">
+        <div className="container-prose pb-14 pt-14 sm:pb-28 sm:pt-32">
           <p className="pill mb-6">Bewerten · Anonym · Verifiziert</p>
           <h1 className="max-w-3xl">
             Wie ist dein
@@ -69,11 +69,11 @@ export default async function Home() {
             </span>{' '}
             wirklich?
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-ink-muted sm:text-xl">
+          <p className="mt-5 max-w-2xl text-base text-ink-muted sm:mt-6 sm:text-xl">
             ProfVote sammelt anonyme Bewertungen von Studenten - verifiziert per
             Uni-Email, sortiert nach Fakultät, in zwei Klicks abgegeben.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3 sm:mt-10">
             <Link href="/uni/stuttgart" className="btn-primary">
               Uni Stuttgart durchsuchen
             </Link>
@@ -82,7 +82,7 @@ export default async function Home() {
             </Link>
           </div>
 
-          <dl className="mt-16 grid max-w-2xl grid-cols-3 gap-8">
+          <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-4 sm:mt-16 sm:gap-8">
             <Stat label="Professoren" value={totalProfs.toLocaleString('de-DE')} />
             <Stat
               label="Universitäten"
@@ -94,7 +94,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="container-prose pb-16">
+      <section className="container-prose pb-12 sm:pb-16">
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2>Uni-Vergleich</h2>
@@ -121,7 +121,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="container-prose pb-20">
+      <section className="container-prose pb-14 sm:pb-20">
         <div className="mb-6 flex items-baseline justify-between">
           <h2>Beliebteste Profs</h2>
           <span className="text-sm text-ink-muted">nach Bewertung × Anzahl</span>
@@ -139,7 +139,7 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="container-prose pb-20">
+      <section className="container-prose pb-14 sm:pb-20">
         <div className="mb-6 flex items-baseline justify-between">
           <h2>Aktuell bewertet</h2>
           <span className="text-sm text-ink-muted">{recent.length} neueste</span>
@@ -186,8 +186,8 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="container-prose pb-28">
-        <div className="mt-16 grid gap-4 sm:grid-cols-3">
+      <section className="container-prose pb-20 sm:pb-28">
+        <div className="mt-10 grid gap-4 sm:mt-16 sm:grid-cols-3">
           <HowCard
             step="1"
             title="Such deinen Prof"
