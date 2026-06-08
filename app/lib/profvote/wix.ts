@@ -5,9 +5,11 @@ let visitorClient: Awaited<ReturnType<typeof makeVisitor>> | null = null;
 let readClientUnavailable = false;
 
 async function makeVisitor() {
+  const clientId = process.env.NEXT_PUBLIC_WIX_CLIENT_ID;
+  if (!clientId) throw new Error('NEXT_PUBLIC_WIX_CLIENT_ID is not set');
   const client = createClient({
     modules: { items },
-    auth: OAuthStrategy({ clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID! }),
+    auth: OAuthStrategy({ clientId }),
   });
   const tokens = await client.auth.generateVisitorTokens();
   client.auth.setTokens(tokens);
@@ -25,11 +27,10 @@ export async function tryGetReadClient() {
     return await getReadClient();
   } catch (error) {
     readClientUnavailable = true;
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('Using local demo data because Wix is unavailable.', error);
-      return null;
-    }
-    throw error;
+    // Always fall back to demo data rather than crashing the build/request.
+    // In production this surfaces as empty lists; better than a 500.
+    console.warn('Wix read client unavailable, using demo data fallback.', error);
+    return null;
   }
 }
 
