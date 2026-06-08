@@ -159,12 +159,11 @@ function StarPicker({
 }) {
   const [hover, setHover] = useState(0);
   const active = hover || value;
-  const lowLabel = categoryKey === 'schwierigkeit' ? 'schwer' : 'schwach';
-  const highLabel = categoryKey === 'schwierigkeit' ? 'leicht' : 'stark';
+  const isDifficulty = categoryKey === 'schwierigkeit';
 
   return (
     <div className="w-full sm:w-auto" onMouseLeave={() => setHover(0)}>
-      <div className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-canvas-soft/70 p-1">
+      <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}
@@ -172,21 +171,23 @@ function StarPicker({
             onClick={() => onChange(n)}
             onMouseEnter={() => setHover(n)}
             aria-label={`Bewertung ${n} von 5`}
-            className={`grid h-9 w-9 place-items-center rounded-full text-lg leading-none transition-all
+            className={`grid h-10 w-10 place-items-center rounded-full text-3xl leading-none transition-all
                         ${
                           n <= active
-                            ? 'bg-white text-ink-soft shadow-sm ring-1 ring-ink-soft/10'
-                            : 'text-ink-muted/35 hover:bg-white/70 hover:text-ink-soft'
+                            ? 'scale-105 text-ink-soft drop-shadow-sm'
+                            : 'text-neutral-300 hover:scale-105 hover:text-ink-soft/70'
                         }`}
           >
             ★
           </button>
         ))}
       </div>
-      <div className="mt-1 flex justify-between px-2 text-[11px] text-ink-muted">
-        <span>1 {lowLabel}</span>
-        <span>5 {highLabel}</span>
-      </div>
+      {isDifficulty && (
+        <div className="mt-1 flex justify-between px-1 text-[11px] text-ink-muted">
+          <span>1 schwer</span>
+          <span>5 leicht</span>
+        </div>
+      )}
     </div>
   );
 }
