@@ -30,7 +30,7 @@ const OPTIONAL_CATEGORIES: Array<{
     key: 'statistics',
     title: 'Statistik',
     description:
-      'Optional. Hilft uns zu verstehen, wie die Website genutzt wird. Aktuell ist kein Analyse-Tool aktiv.',
+      'Vercel Web Analytics & Speed Insights — cookiefreie, anonyme Auswertung von Seitenaufrufen und Ladezeiten. Keine Nutzerprofile, keine Cross-Site-Tracker.',
   },
   {
     key: 'comfort',

@@ -159,20 +159,31 @@ export default function DatenschutzPage() {
           </p>
         </Section>
 
-        <Section title="7. Hosting">
+        <Section title="7. Hosting &amp; Analyse-Dienste (Vercel)">
           <p>
             Unsere Website wird bei Vercel Inc., 440 N Barranca Ave #4133, Covina, CA
-            91723, USA gehostet. Beim Aufruf der Website verarbeitet Vercel insbesondere
-            technisch erforderliche Zugriffsdaten, z. B. IP-Adresse, Zeitpunkt des
-            Zugriffs, angeforderte Inhalte, Browser- und Systeminformationen, um die
-            Website auszuliefern, die Sicherheit zu gewährleisten und den Betrieb zu
-            stabilisieren.
+            91723, USA gehostet. Beim Aufruf der Website verarbeitet Vercel technisch
+            erforderliche Zugriffsdaten (z. B. IP-Adresse, Zeitpunkt, Browser) zur
+            Auslieferung und Absicherung des Angebots. Rechtsgrundlage: Art. 6 Abs. 1
+            Satz 1 lit. f DSGVO. Soweit erforderlich, besteht ein
+            Auftragsverarbeitungsvertrag mit Vercel.
           </p>
-          <p className="mt-2">
-            Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 Satz 1 lit. f DSGVO.
-            Unser berechtigtes Interesse liegt in der sicheren, schnellen und
-            zuverlässigen Bereitstellung unseres Online-Angebots. Soweit erforderlich,
-            haben wir mit Vercel eine Vereinbarung zur Auftragsverarbeitung geschlossen.
+          <p className="mt-3 font-medium text-ink-soft">Vercel Web Analytics</p>
+          <p className="mt-1">
+            Wir nutzen Vercel Web Analytics zur Auswertung der Seitennutzung. Der Dienst
+            erhebt <strong>keine Cookies</strong> und speichert <strong>keine
+            personenbezogenen Daten</strong> dauerhaft. Es wird lediglich eine aggregierte,
+            nicht personenbeziehbare Statistik (Seitenaufrufe, Herkunftsland, Geräteklasse)
+            erzeugt. Eine individuelle Nutzeridentifikation findet nicht statt.
+            Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO (berechtigtes Interesse
+            an aggregierter Nutzungsanalyse ohne Tracking).
+          </p>
+          <p className="mt-3 font-medium text-ink-soft">Vercel Speed Insights</p>
+          <p className="mt-1">
+            Wir nutzen Vercel Speed Insights zur Messung der Ladegeschwindigkeit der
+            Website. Dabei werden technische Performance-Metriken (Core Web Vitals)
+            anonym erfasst. Es werden keine personenbezogenen Daten gespeichert.
+            Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO.
           </p>
         </Section>
 
