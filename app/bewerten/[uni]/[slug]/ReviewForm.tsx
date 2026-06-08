@@ -89,7 +89,6 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
               {cat.hint && <div className="text-xs text-ink-muted">{cat.hint}</div>}
             </div>
             <StarPicker
-              categoryKey={cat.key}
               value={ratings[cat.key] || 0}
               onChange={(v) => setRatings((r) => ({ ...r, [cat.key]: v }))}
             />
@@ -149,17 +148,14 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
 }
 
 function StarPicker({
-  categoryKey,
   value,
   onChange,
 }: {
-  categoryKey: (typeof CATEGORIES)[number]['key'];
   value: number;
   onChange: (v: number) => void;
 }) {
   const [hover, setHover] = useState(0);
   const active = hover || value;
-  const isDifficulty = categoryKey === 'schwierigkeit';
 
   return (
     <div className="w-full sm:w-auto" onMouseLeave={() => setHover(0)}>
@@ -182,12 +178,6 @@ function StarPicker({
           </button>
         ))}
       </div>
-      {isDifficulty && (
-        <div className="mt-1 flex justify-between px-1 text-[11px] text-ink-muted">
-          <span>1 schwer</span>
-          <span>5 leicht</span>
-        </div>
-      )}
     </div>
   );
 }
