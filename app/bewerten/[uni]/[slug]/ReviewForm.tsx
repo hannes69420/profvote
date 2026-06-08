@@ -89,6 +89,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
               {cat.hint && <div className="text-xs text-ink-muted">{cat.hint}</div>}
             </div>
             <StarPicker
+              categoryKey={cat.key}
               value={ratings[cat.key] || 0}
               onChange={(v) => setRatings((r) => ({ ...r, [cat.key]: v }))}
             />
@@ -148,18 +149,27 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
 }
 
 function StarPicker({
+  categoryKey,
   value,
   onChange,
 }: {
+  categoryKey: (typeof CATEGORIES)[number]['key'];
   value: number;
   onChange: (v: number) => void;
 }) {
   const [hover, setHover] = useState(0);
   const active = hover || value;
+  const labels =
+    categoryKey === 'schwierigkeit'
+      ? ['Sehr schwer', 'Schwer', 'Mittel', 'Eher leicht', 'Leicht']
+      : ['Schwach', 'Eher schwach', 'Okay', 'Gut', 'Sehr gut'];
 
   return (
-    <div className="w-full sm:w-auto" onMouseLeave={() => setHover(0)}>
-      <div className="flex items-center gap-1">
+    <div
+      className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 sm:w-auto sm:justify-end"
+      onMouseLeave={() => setHover(0)}
+    >
+      <div className="flex items-center gap-0.5">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}
@@ -167,17 +177,24 @@ function StarPicker({
             onClick={() => onChange(n)}
             onMouseEnter={() => setHover(n)}
             aria-label={`Bewertung ${n} von 5`}
-            className={`grid h-10 w-10 place-items-center text-3xl leading-none transition-all
+            className={`grid h-10 w-9 place-items-center text-4xl leading-none transition-all duration-150 active:scale-95
                         ${
                           n <= active
-                            ? 'scale-110 text-[#f5b301] drop-shadow-sm'
-                            : 'text-neutral-300 hover:scale-110 hover:text-[#f5b301]'
+                            ? 'scale-110 text-[#f5b301] drop-shadow-[0_4px_10px_rgba(245,179,1,0.28)]'
+                            : 'text-neutral-300 hover:-translate-y-0.5 hover:scale-110 hover:text-[#f5b301]'
                         }`}
           >
             ★
           </button>
         ))}
       </div>
+      <span
+        className={`min-w-[5.5rem] text-left text-sm font-medium transition-colors sm:text-right ${
+          active ? 'text-ink-soft' : 'text-ink-muted'
+        }`}
+      >
+        {active ? labels[active - 1] : 'Auswählen'}
+      </span>
     </div>
   );
 }
