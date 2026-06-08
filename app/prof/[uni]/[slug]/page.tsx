@@ -157,12 +157,21 @@ export default async function ProfPage({
                           · Schwierigkeit {r.ratings.schwierigkeit}/5
                         </span>
                       </div>
-                      <time className="text-xs text-ink-muted">
-                        {new Date(r.createdAt).toLocaleDateString('de-DE', {
-                          year: 'numeric',
-                          month: 'short',
-                        })}
-                      </time>
+                      <div className="flex items-center gap-3">
+                        <time className="text-xs text-ink-muted">
+                          {new Date(r.createdAt).toLocaleDateString('de-DE', {
+                            year: 'numeric',
+                            month: 'short',
+                          })}
+                        </time>
+                        <a
+                          href={`mailto:profvote-info@gmx.de?subject=${encodeURIComponent(`Meldung: Bewertung (${prof.name}, ${uni.shortName})`)}&body=${encodeURIComponent(`Ich möchte folgende Bewertung melden:\n\nProfessor: ${prof.name}\nUni: ${uni.shortName}\nBewertungs-ID: ${r.id}\n\nBegründung:\n`)}`}
+                          className="text-xs text-ink-muted transition-colors hover:text-rose-500"
+                          title="Bewertung melden"
+                        >
+                          Melden
+                        </a>
+                      </div>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-ink-soft">{r.comment}</p>
                   </li>
