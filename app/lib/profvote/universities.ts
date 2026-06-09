@@ -15,7 +15,8 @@ export const UNI_CONFIG: Record<UniversitySlug, Omit<University, 'professorCount
     shortName: 'KIT',
     shortDescription: 'Über 360 Professoren, Technik & Wirtschaft.',
     available: true,
-    emailDomains: ['student.kit.edu', 'kit.edu'],
+    // Students receive uXXXXXX@student.kit.edu (kit.edu is staff/professor only)
+    emailDomains: ['student.kit.edu'],
   },
   tuebingen: {
     slug: 'tuebingen',
@@ -31,7 +32,8 @@ export const UNI_CONFIG: Record<UniversitySlug, Omit<University, 'professorCount
     shortName: 'TUM',
     shortDescription: '685 Professoren aus 7 TUM Schools gelistet.',
     available: true,
-    emailDomains: ['mytum.de', 'tum.de'],
+    // Students receive vorname.nachname@tum.de; @mytum.de for older/legacy accounts
+    emailDomains: ['tum.de', 'mytum.de'],
   },
 };
 

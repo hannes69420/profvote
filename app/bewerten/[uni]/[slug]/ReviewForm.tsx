@@ -169,7 +169,13 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
-              placeholder={`st123456@${allowedDomains[0]}`}
+              placeholder={
+              allowedDomains[0] === 'student.kit.edu'
+                ? 'u1234567@student.kit.edu'
+                : allowedDomains[0] === 'tum.de'
+                ? 'max.mustermann@tum.de'
+                : `st123456@${allowedDomains[0]}`
+            }
               className="mt-3 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm
                          placeholder:text-ink-muted focus:border-ink-soft focus:outline-none
                          focus:ring-2 focus:ring-ink-soft/10"
