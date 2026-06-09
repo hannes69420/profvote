@@ -58,8 +58,15 @@ export default function DatenschutzPage() {
               öffentlich angezeigt. Passwörter oder Nutzerkonten werden nicht angelegt.
             </p>
             <p className="mt-2">
-              Zwecke: Verifizierung der Hochschulzugehörigkeit, Verhinderung von Missbrauch.
-              Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO.
+              Für Ihren Komfort wird Ihre E-Mail-Adresse nach erfolgreicher Abgabe
+              zusätzlich <strong>lokal in Ihrem Browser gespeichert</strong> (localStorage),
+              sodass Sie diese bei einer weiteren Bewertung nicht erneut eingeben müssen.
+              Diese lokale Speicherung verlässt Ihren Browser nicht (siehe Abschnitt 4b).
+            </p>
+            <p className="mt-2">
+              Zwecke: Verifizierung der Hochschulzugehörigkeit, Verhinderung von Missbrauch,
+              Komfortsteigerung bei weiteren Bewertungen.
+              Rechtsgrundlage: Art. 6 Abs. 1 Satz 1 lit. f DSGVO, § 25 Abs. 2 Nr. 2 TDDDG.
             </p>
           </SubSection>
           <SubSection title="c) Bewertungen und deren Veröffentlichung">
@@ -89,24 +96,48 @@ export default function DatenschutzPage() {
           </SubSection>
         </Section>
 
-        <Section title="4. Cookies">
+        <Section title="4. Cookies und lokale Speicherung (localStorage)">
           <p>
             Unsere Website verwendet technisch notwendige Cookies und ähnliche
-            Speichertechnologien (z. B. localStorage) zur Sicherstellung der
-            Funktionalität, Sicherheit und zur Speicherung Ihrer Cookie-Einwilligung.
-            Passwörter oder Kontozugänge werden nicht per Cookie verwaltet.
+            Speichertechnologien (localStorage) zur Sicherstellung der Funktionalität,
+            Sicherheit und zur Speicherung Ihrer Cookie-Einwilligung. Passwörter oder
+            Nutzerkonten werden nicht per Cookie oder localStorage verwaltet.
           </p>
           <p className="mt-2">
-            Technisch notwendige Cookies werden auf Grundlage von § 25 Abs. 2 TDDDG
-            sowie Art. 6 Abs. 1 Satz 1 lit. f DSGVO verarbeitet. Weitere Cookies werden
-            nur mit Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 Satz 1 lit. a
-            DSGVO eingesetzt.
+            Technisch notwendige Cookies und localStorage-Einträge werden auf Grundlage
+            von § 25 Abs. 2 Nr. 2 TDDDG sowie Art. 6 Abs. 1 Satz 1 lit. f DSGVO
+            verarbeitet, da sie zur Erbringung des von Ihnen ausdrücklich gewünschten
+            Dienstes unbedingt erforderlich sind. Weitere Cookies werden nur mit Ihrer
+            ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 Satz 1 lit. a DSGVO eingesetzt.
           </p>
-          <p className="mt-2">
-            Sie können Ihre Cookie-Einwilligung jederzeit mit Wirkung für die Zukunft
-            über den Link „Cookie-Einstellungen" im Footer dieser Website oder über Ihre
-            Browser-Einstellungen ändern oder widerrufen.
-          </p>
+
+          <SubSection title="a) Cookie-Einwilligung">
+            <p>
+              Ihre Cookie-Einwilligung wird in einem Cookie (z. B.{' '}
+              <code className="rounded bg-neutral-100 px-1 text-xs dark:bg-neutral-800">cookie_consent</code>)
+              in Ihrem Browser gespeichert. Rechtsgrundlage: § 25 Abs. 2 Nr. 2 TDDDG.
+              Sie können Ihre Einwilligung jederzeit über den Link „Cookie-Einstellungen"
+              im Footer dieser Website oder über Ihre Browser-Einstellungen widerrufen.
+            </p>
+          </SubSection>
+
+          <SubSection title="b) E-Mail-Erinnerung (localStorage)">
+            <p>
+              Nach erfolgreicher Abgabe einer Bewertung speichern wir Ihre
+              Universitäts-E-Mail-Adresse im lokalen Speicher Ihres Browsers
+              (localStorage, Schlüssel:{' '}
+              <code className="rounded bg-neutral-100 px-1 text-xs dark:bg-neutral-800">profvote_email</code>
+              ), damit Sie diese bei einer erneuten Bewertung nicht erneut eingeben müssen.
+              Diese Information verlässt Ihren Browser nicht und wird nicht an uns oder
+              Dritte übertragen.
+            </p>
+            <p className="mt-2">
+              Rechtsgrundlage: § 25 Abs. 2 Nr. 2 TDDDG (technisch unbedingt erforderlich
+              für den von Ihnen gewünschten Dienst). Sie können den gespeicherten Eintrag
+              jederzeit im Bewertungsformular über den Button „Vergessen" entfernen oder
+              über die Einstellungen Ihres Browsers (Websitedaten löschen).
+            </p>
+          </SubSection>
         </Section>
 
         <Section title="5. Weitergabe von Daten / Auftragsverarbeiter">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
 const CATEGORIES: Array<{
@@ -16,6 +16,8 @@ const CATEGORIES: Array<{
   { key: 'schwierigkeit', label: 'Schwierigkeit', hint: '1 = schwer, 5 = leicht' },
 ];
 
+const LS_KEY = 'profvote_email';
+
 interface Props {
   uni: UniversitySlug;
   professorId: string;
@@ -29,8 +31,28 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [comment, setComment] = useState('');
   const [email, setEmail] = useState('');
+  const [savedEmail, setSavedEmail] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
+
+  // Load saved email from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(LS_KEY);
+      if (stored) {
+        setSavedEmail(stored);
+        setEmail(stored);
+      }
+    } catch {
+      // localStorage not available (SSR / private mode)
+    }
+  }, []);
+
+  function forgetEmail() {
+    try { localStorage.removeItem(LS_KEY); } catch { /* ignore */ }
+    setSavedEmail(null);
+    setEmail('');
+  }
 
   const allFilled = CATEGORIES.every((c) => ratings[c.key] >= 1);
 
@@ -54,6 +76,9 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
         setError(data.error || 'Fehler beim Speichern.');
         return;
       }
+      // Save email for next time
+      try { localStorage.setItem(LS_KEY, email.trim().toLowerCase()); } catch { /* ignore */ }
+      setSavedEmail(email.trim().toLowerCase());
       setStatus('done');
     } catch {
       setStatus('error');
@@ -116,19 +141,41 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
 
       <div className="card">
         <label className="block text-sm font-medium text-ink-soft">Uni-Email</label>
-        <p className="mt-1 text-xs text-ink-muted">
-          Nur Adressen auf {allowedDomains.map((d) => `@${d}`).join(' oder ')}.
-        </p>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value.trim())}
-          placeholder={`st123456@${allowedDomains[0]}`}
-          className="mt-3 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm
-                     placeholder:text-ink-muted focus:border-ink-soft focus:outline-none
-                     focus:ring-2 focus:ring-ink-soft/10"
-        />
+
+        {savedEmail && email === savedEmail ? (
+          /* Saved email banner */
+          <div className="mt-2 flex items-center justify-between rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 dark:bg-green-950 dark:border-green-800">
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 dark:text-green-400">✓</span>
+              <span className="text-sm text-green-800 dark:text-green-300">
+                Gespeicherte E-Mail: <strong>{savedEmail}</strong>
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={forgetEmail}
+              className="ml-4 shrink-0 text-xs text-ink-muted underline hover:text-rose-500"
+            >
+              Vergessen
+            </button>
+          </div>
+        ) : (
+          <>
+            <p className="mt-1 text-xs text-ink-muted">
+              Nur Adressen auf {allowedDomains.map((d) => `@${d}`).join(' oder ')}.
+            </p>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value.trim())}
+              placeholder={`st123456@${allowedDomains[0]}`}
+              className="mt-3 w-full rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm
+                         placeholder:text-ink-muted focus:border-ink-soft focus:outline-none
+                         focus:ring-2 focus:ring-ink-soft/10"
+            />
+          </>
+        )}
       </div>
 
       {error && (
