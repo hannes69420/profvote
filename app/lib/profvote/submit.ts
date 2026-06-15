@@ -23,7 +23,7 @@ function randomToken(): string {
   return randomBytes(32).toString('hex');
 }
 
-function buildItemFields(uni: UniversitySlug, input: SubmitInput, token: string) {
+export function buildItemFields(uni: UniversitySlug, input: SubmitInput, token: string) {
   const comment = input.comment?.trim() || '';
   const base: Record<string, unknown> = {
     Kommentar: comment,
