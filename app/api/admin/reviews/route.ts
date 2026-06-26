@@ -6,6 +6,8 @@ import type { UniversitySlug } from '@app/lib/profvote/types';
 
 export const runtime = 'nodejs';
 
+type MutableWixDataItem = Record<string, unknown> & { _id: string };
+
 function checkAuth(req: Request): boolean {
   const secret = process.env.ADMIN_SECRET;
   if (!secret) return false;
@@ -156,10 +158,10 @@ export async function PATCH(req: Request) {
 
   try {
     const wix = getAdminClient();
-    const existing = await wix.items.get(collection, id) as Record<string, unknown>;
+    const existing = (await wix.items.get(collection, id)) as Record<string, unknown> | null;
     if (!existing) return NextResponse.json({ error: 'Nicht gefunden' }, { status: 404 });
 
-    const updates: Record<string, unknown> = { ...existing, _id: id };
+    const updates: MutableWixDataItem = { ...existing, _id: id };
     if (approveParam !== null) updates.commentApproved = approveParam === 'true';
     if (verify) updates.verified = true;
 

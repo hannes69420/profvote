@@ -3,6 +3,8 @@ import { getAdminClient } from './wix';
 import { REVIEW_COLLECTION, UNI_CONFIG } from './universities';
 import type { RatingBreakdown, UniversitySlug } from './types';
 
+type MutableWixDataItem = Record<string, unknown> & { _id: string };
+
 export interface SubmitInput {
   uni: UniversitySlug;
   professorId: string;
@@ -88,10 +90,11 @@ export async function confirmReview(
   const existing = (await wix.items.get(collection, reviewId)) as Record<string, unknown> | null;
   if (!existing || existing.verificationToken !== token) return false;
   if (existing.verified === true) return true;
-  await wix.items.update(collection, {
+  const update: MutableWixDataItem = {
     ...existing,
     _id: reviewId,
     verified: true,
-  });
+  };
+  await wix.items.update(collection, update);
   return true;
 }
