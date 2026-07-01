@@ -32,6 +32,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
   const [comment, setComment] = useState('');
   const [email, setEmail] = useState('');
   const [savedEmail, setSavedEmail] = useState<string | null>(null);
+  const [alreadyVerified, setAlreadyVerified] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
 
@@ -79,6 +80,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
       // Save email for next time
       try { localStorage.setItem(LS_KEY, email.trim().toLowerCase()); } catch { /* ignore */ }
       setSavedEmail(email.trim().toLowerCase());
+      setAlreadyVerified(Boolean(data.alreadyVerified));
       setStatus('done');
     } catch {
       setStatus('error');
@@ -87,6 +89,23 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
   };
 
   if (status === 'done') {
+    if (alreadyVerified) {
+      return (
+        <div className="card">
+          <h2>Bewertung gespeichert</h2>
+          <p className="mt-3 text-ink-muted">
+            Deine E-Mail <span className="text-ink-soft">{email}</span> war bereits bestätigt.
+            Die Bewertung wurde direkt gespeichert.
+          </p>
+          {comment.trim() && (
+            <p className="mt-2 text-sm text-ink-muted">
+              Dein Kommentar wird vor der Veröffentlichung noch kurz geprüft.
+            </p>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div className="card">
         <h2>Check deine Email</h2>

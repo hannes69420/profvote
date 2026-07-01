@@ -56,6 +56,9 @@ export default function DatenschutzPage() {
               Nach erfolgreicher Verifizierung per Bestätigungslink wird die E-Mail-Adresse
               intern für Missbrauchsschutz und Moderationszwecke gespeichert und nicht
               öffentlich angezeigt. Passwörter oder Nutzerkonten werden nicht angelegt.
+              Bei späteren Bewertungen prüfen wir, ob diese E-Mail-Adresse bereits
+              erfolgreich verifiziert wurde, damit nicht jedes Mal erneut eine
+              Bestätigungs-Mail erforderlich ist.
             </p>
             <p className="mt-2">
               Für Ihren Komfort wird Ihre E-Mail-Adresse nach erfolgreicher Abgabe

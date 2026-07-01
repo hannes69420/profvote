@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isAllowedEmail, submitReview } from '@app/lib/profvote/submit';
+import { hasVerifiedEmailForUni, isAllowedEmail, submitReview } from '@app/lib/profvote/submit';
 import { sendVerificationEmail } from '@app/lib/profvote/email';
 import { getProfessorById } from '@app/lib/profvote/professors';
 import { UNI_CONFIG } from '@app/lib/profvote/universities';
@@ -118,17 +118,23 @@ export async function POST(req: Request) {
 
   let reviewId: string;
   let token: string;
+  let alreadyVerified = false;
   try {
-    ({ reviewId, token } = await submitReview({
+    alreadyVerified = await hasVerifiedEmailForUni(uni, body.email);
+    ({ reviewId, token, alreadyVerified } = await submitReview({
       uni,
       professorId: body.professorId,
       email: body.email,
       ratings,
       comment: body.comment,
-    }));
+    }, { skipEmailVerification: alreadyVerified }));
   } catch (e) {
     console.error('submit failed', e);
     return NextResponse.json({ error: getSafeSubmitError(e) }, { status: 500 });
+  }
+
+  if (alreadyVerified) {
+    return NextResponse.json({ ok: true, alreadyVerified: true });
   }
 
   try {

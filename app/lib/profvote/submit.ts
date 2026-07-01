@@ -64,19 +64,44 @@ export function buildItemFields(uni: UniversitySlug, input: SubmitInput, token: 
 export interface SubmitResult {
   reviewId: string;
   token: string;
+  alreadyVerified: boolean;
 }
 
-export async function submitReview(input: SubmitInput): Promise<SubmitResult> {
+export async function hasVerifiedEmailForUni(uni: UniversitySlug, email: string): Promise<boolean> {
+  const collection = REVIEW_COLLECTION[uni];
+  if (!collection) return false;
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const wix = getAdminClient();
+  const res = await wix.items
+    .query(collection)
+    .eq('userEmail', normalizedEmail)
+    .eq('verified', true)
+    .limit(1)
+    .find();
+
+  return (res.items?.length ?? 0) > 0;
+}
+
+export async function submitReview(
+  input: SubmitInput,
+  options: { skipEmailVerification?: boolean } = {},
+): Promise<SubmitResult> {
   const collection = REVIEW_COLLECTION[input.uni];
   if (!collection) throw new Error(`No review collection for uni ${input.uni}`);
 
   const token = randomToken();
   const wix = getAdminClient();
-  const fields = buildItemFields(input.uni, input, token);
+  const fields: Record<string, unknown> = buildItemFields(input.uni, input, token);
+  if (options.skipEmailVerification) {
+    fields.verified = true;
+    fields.verificationToken = '';
+    delete fields.deleteAfter;
+  }
   const created = (await wix.items.insert(collection, fields)) as Record<string, unknown>;
   const reviewId = created._id as string | undefined;
   if (!reviewId) throw new Error('Insert returned no _id');
-  return { reviewId, token };
+  return { reviewId, token, alreadyVerified: Boolean(options.skipEmailVerification) };
 }
 
 export async function confirmReview(

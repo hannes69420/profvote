@@ -25,8 +25,22 @@ type Review = {
   };
 };
 
-type Tab = 'stats' | 'erstellen' | 'kommentare' | 'bewertungen';
+type Tab = 'stats' | 'erstellen' | 'cms' | 'kommentare' | 'bewertungen';
 type UniSlug = 'stuttgart' | 'kit' | 'tum';
+
+type CmsEntry = {
+  id: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  preview: {
+    name: string;
+    faculty?: string;
+    title?: string;
+    avgOverall?: number;
+    reviewCount?: number;
+  };
+  fields: Record<string, string | number>;
+};
 
 const UNI_LABELS: Record<UniSlug, string> = {
   stuttgart: 'Stuttgart',
@@ -41,6 +55,27 @@ const RATING_LABELS: Record<string, string> = {
   klausur: 'Klausur',
   organisation: 'Organisation',
   schwierigkeit: 'Schwierigkeit',
+};
+
+const CMS_FIELD_LABELS: Record<string, string> = {
+  name: 'Professorenname',
+  title: 'Titel / Anzeigename',
+  slug: 'URL-Name',
+  fakultatEn: 'Fakultaet / Fachbereich',
+  fakultaet: 'Fakultaet',
+  fakultat_nr: 'Fakultaetsnummer',
+  kategorie_basis: 'Kategorie / Status',
+  status: 'Status',
+  avgOverall: 'Angezeigte Bewertung',
+  anzahl: 'Anzahl Bewertungen',
+  school: 'School',
+  School: 'School',
+  fachbereich: 'Fachbereich',
+  Fachbereich: 'Fachbereich',
+  studiengang: 'Studiengang',
+  Studiengang: 'Studiengang',
+  zuordnung: 'Zuordnung',
+  Zuordnung: 'Zuordnung',
 };
 
 export default function AdminPage() {
@@ -165,6 +200,7 @@ export default function AdminPage() {
         <div className="mt-6 flex gap-1 border-b overflow-x-auto" style={{ borderColor: 'rgb(var(--border))' }}>
           <TabButton active={tab === 'stats'} onClick={() => setTab('stats')} label="📊 Dashboard" />
           <TabButton active={tab === 'erstellen'} onClick={() => setTab('erstellen')} label="✍️ Bewertung erstellen" />
+          <TabButton active={tab === 'cms'} onClick={() => setTab('cms')} label="CMS bearbeiten" />
           <TabButton active={tab === 'kommentare'} onClick={() => setTab('kommentare')}
             label="Kommentare" badge={pendingComments.length > 0 ? pendingComments.length : undefined} badgeColor="amber" />
           <TabButton active={tab === 'bewertungen'} onClick={() => setTab('bewertungen')} label="Alle Bewertungen" />
@@ -248,6 +284,11 @@ export default function AdminPage() {
         {/* ── TAB: BEWERTUNG ERSTELLEN ── */}
         {!loading && !error && tab === 'erstellen' && (
           <CreateReviewForm secret={secret} uni={uni} onCreated={fetchReviews} />
+        )}
+
+        {/* ── TAB: CMS BEARBEITEN ── */}
+        {!loading && !error && tab === 'cms' && (
+          <CmsEditor secret={secret} uni={uni} />
         )}
 
         {/* ── TAB: KOMMENTARE PRÜFEN ── */}
@@ -372,6 +413,156 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── CMS EDITOR ──
+function CmsEditor({ secret, uni }: { secret: string; uni: UniSlug }) {
+  const [query, setQuery] = useState('');
+  const [entries, setEntries] = useState<CmsEntry[]>([]);
+  const [editableFields, setEditableFields] = useState<string[]>([]);
+  const [loadingCms, setLoadingCms] = useState(false);
+  const [savingId, setSavingId] = useState<string | null>(null);
+  const [cmsError, setCmsError] = useState('');
+  const [notice, setNotice] = useState('');
+
+  const loadEntries = useCallback(async () => {
+    setLoadingCms(true);
+    setCmsError('');
+    setNotice('');
+    try {
+      const params = new URLSearchParams({ secret, uni, q: query });
+      const res = await fetch(`/api/admin/cms?${params.toString()}`);
+      if (res.status === 401) throw new Error('Nicht berechtigt.');
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setEntries(data.entries ?? []);
+      setEditableFields(data.editableFields ?? []);
+      if (data.limited) setNotice('Es werden die ersten 100 Treffer angezeigt. Bitte Suche verfeinern.');
+    } catch (e) {
+      setCmsError(e instanceof Error ? e.message : 'CMS-Daten konnten nicht geladen werden.');
+    }
+    setLoadingCms(false);
+  }, [query, secret, uni]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => { loadEntries(); }, 250);
+    return () => clearTimeout(timer);
+  }, [loadEntries]);
+
+  function updateField(id: string, key: string, value: string) {
+    setEntries((prev) => prev.map((entry) => (
+      entry.id === id
+        ? { ...entry, fields: { ...entry.fields, [key]: value } }
+        : entry
+    )));
+  }
+
+  async function saveEntry(entry: CmsEntry) {
+    setSavingId(entry.id);
+    setCmsError('');
+    setNotice('');
+    try {
+      const res = await fetch(`/api/admin/cms?secret=${encodeURIComponent(secret)}&uni=${uni}&id=${encodeURIComponent(entry.id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: entry.fields }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setEntries((prev) => prev.map((item) => (item.id === entry.id ? data.entry : item)));
+      setNotice('CMS-Eintrag gespeichert.');
+    } catch (e) {
+      setCmsError(e instanceof Error ? e.message : 'Speichern fehlgeschlagen.');
+    }
+    setSavingId(null);
+  }
+
+  return (
+    <div className="mt-6 space-y-4">
+      <div className="card">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="!text-xl font-semibold text-ink-soft">CMS-Stammdaten bearbeiten</h2>
+            <p className="mt-1 text-sm text-ink-muted">
+              Bearbeitet die Professoren-Collection der aktuell ausgewählten Uni ({UNI_LABELS[uni]}).
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={loadEntries}
+            disabled={loadingCms}
+            className="btn-ghost-lg text-sm disabled:opacity-50"
+          >
+            {loadingCms ? 'Lade...' : 'Neu laden'}
+          </button>
+        </div>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Nach Name, Fakultät, School oder Status suchen..."
+          className="mt-4 w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ink-soft/10 dark:bg-neutral-900"
+          style={{ borderColor: 'rgb(var(--border))' }}
+        />
+      </div>
+
+      {cmsError && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950 dark:text-rose-300">
+          {cmsError}
+        </div>
+      )}
+      {notice && (
+        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+          {notice}
+        </div>
+      )}
+
+      {loadingCms ? (
+        <div className="card py-8 text-center text-sm text-ink-muted">Lade CMS-Einträge...</div>
+      ) : entries.length === 0 ? (
+        <div className="card py-8 text-center text-sm text-ink-muted">Keine CMS-Einträge gefunden.</div>
+      ) : (
+        <div className="space-y-3">
+          {entries.map((entry) => (
+            <div key={entry.id} className="card">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <p className="break-words font-semibold text-ink-soft">{entry.preview.name}</p>
+                  <p className="mt-1 break-words text-xs text-ink-muted">
+                    {entry.preview.faculty || 'Keine Fakultät'} · ID {entry.id}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => saveEntry(entry)}
+                  disabled={savingId === entry.id}
+                  className="rounded-xl bg-ink-soft px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  {savingId === entry.id ? 'Speichert...' : 'Speichern'}
+                </button>
+              </div>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {editableFields.map((key) => (
+                  <label key={key} className="block">
+                    <span className="text-xs font-medium text-ink-muted">
+                      {CMS_FIELD_LABELS[key] || key}
+                    </span>
+                    <input
+                      value={entry.fields[key] ?? ''}
+                      onChange={(e) => updateField(entry.id, key, e.target.value)}
+                      className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-ink-soft outline-none focus:ring-2 focus:ring-ink-soft/10 dark:bg-neutral-900"
+                      style={{ borderColor: 'rgb(var(--border))' }}
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

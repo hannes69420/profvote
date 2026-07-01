@@ -58,11 +58,10 @@ function listTumProfessors(): Professor[] {
 
 export async function listProfessorsByUni(uniSlug: UniversitySlug): Promise<Professor[]> {
   if (!UNI_CONFIG[uniSlug]?.available) return [];
-  if (uniSlug === 'tum') return listTumProfessors();
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return [];
   const wix = await tryGetReadClient();
-  if (!wix) return listDemoProfessorsByUni(uniSlug);
+  if (!wix) return uniSlug === 'tum' ? listTumProfessors() : listDemoProfessorsByUni(uniSlug);
   const all: Professor[] = [];
   let skip = 0;
   const pageSize = 100;
@@ -73,6 +72,7 @@ export async function listProfessorsByUni(uniSlug: UniversitySlug): Promise<Prof
     skip += pageSize;
     if (skip > 5000) break;
   }
+  if (uniSlug === 'tum' && all.length === 0) return listTumProfessors();
   all.sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return all;
 }
@@ -98,17 +98,22 @@ export async function listTopProfessors(limit = 5): Promise<Professor[]> {
 }
 
 export async function getProfessorById(uniSlug: UniversitySlug, id: string): Promise<Professor | null> {
-  if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
   const collection = PROF_COLLECTION[uniSlug];
   if (!collection) return null;
   const wix = await tryGetReadClient();
-  if (!wix) return DEMO_PROFESSORS.find((p) => p.uni === uniSlug && p.id === id) ?? null;
+  if (!wix) {
+    if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
+    return DEMO_PROFESSORS.find((p) => p.uni === uniSlug && p.id === id) ?? null;
+  }
   try {
     const res = await wix.items.query(collection).eq('_id', id).limit(1).find();
     const raw = res.items?.[0] as Record<string, unknown> | undefined;
-    return raw ? normalizeProf(uniSlug, raw) : null;
+    if (raw) return normalizeProf(uniSlug, raw);
+    if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
+    return null;
   } catch {
     if (process.env.NODE_ENV !== 'production') {
+      if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
       return DEMO_PROFESSORS.find((p) => p.uni === uniSlug && p.id === id) ?? null;
     }
     return null;
