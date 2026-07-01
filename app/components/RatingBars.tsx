@@ -25,7 +25,7 @@ export function RatingBars({ stats }: { stats: AggregatedRatings | null }) {
               {label}
               {invert && (
                 <div className="text-[10px] uppercase tracking-wider text-ink-muted/70">
-                  niedrig = leicht
+                  1 schwer · 5 leicht
                 </div>
               )}
             </div>

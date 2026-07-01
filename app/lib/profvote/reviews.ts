@@ -1,6 +1,6 @@
 import { tryGetReadClient } from './wix';
 import { DEMO_REVIEWS, listDemoReviewsForProfessor } from './demoData';
-import { REVIEW_COLLECTION } from './universities';
+import { REVIEW_COLLECTION, UNI_CONFIG } from './universities';
 import type { AggregatedRatings, RatingBreakdown, Review, UniversitySlug } from './types';
 
 function getRatings(uni: UniversitySlug, raw: Record<string, unknown>): RatingBreakdown {
@@ -43,6 +43,7 @@ function toIso(v: unknown): string {
 }
 
 function normalizeReview(uni: UniversitySlug, raw: Record<string, unknown>): Review | null {
+  if (!isRealReviewRecord(uni, raw)) return null;
   const professorId = getProfessorId(uni, raw);
   if (!professorId) return null;
   return {
@@ -57,6 +58,17 @@ function normalizeReview(uni: UniversitySlug, raw: Record<string, unknown>): Rev
     ratings: getRatings(uni, raw),
     verified: raw.verified !== false,
   };
+}
+
+function isRealReviewRecord(uni: UniversitySlug, raw: Record<string, unknown>): boolean {
+  if (raw.verified !== true) return false;
+  if (raw.isAdminReview === true) return true;
+
+  const email = typeof raw.userEmail === 'string' ? raw.userEmail.trim().toLowerCase() : '';
+  if (!email) return false;
+
+  const domains = UNI_CONFIG[uni]?.emailDomains ?? [];
+  return domains.some((domain) => email.endsWith(`@${domain}`));
 }
 
 export async function listReviewsForProfessor(

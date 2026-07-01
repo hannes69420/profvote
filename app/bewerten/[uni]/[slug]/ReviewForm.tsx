@@ -13,7 +13,7 @@ const CATEGORIES: Array<{
   { key: 'skript', label: 'Skript', hint: 'Folien, Unterlagen' },
   { key: 'klausur', label: 'Klausur', hint: 'Fairness & Vorbereitung' },
   { key: 'organisation', label: 'Organisation', hint: 'Termine, Klausur-Anmeldung' },
-  { key: 'schwierigkeit', label: 'Schwierigkeit', hint: '1 = schwer, 5 = leicht' },
+  { key: 'schwierigkeit', label: 'Schwierigkeit (1 schwer, 5 leicht)', hint: '1 = schwer, 5 = leicht' },
 ];
 
 const LS_KEY = 'profvote_email';

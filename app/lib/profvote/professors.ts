@@ -1,5 +1,6 @@
 import { tryGetReadClient } from './wix';
 import { DEMO_PROFESSORS, listDemoProfessorsByUni } from './demoData';
+import { aggregate, listReviewsByUni, listReviewsForProfessor } from './reviews';
 import { TUM_PROFESSOR_ROWS } from './tumProfessors';
 import { PROF_COLLECTION, UNI_CONFIG } from './universities';
 import type { Professor, UniversitySlug } from './types';
@@ -32,8 +33,46 @@ function normalizeProf(uni: UniversitySlug, raw: Record<string, unknown>): Profe
     faculty: (raw.fakultatEn as string) || (raw.fakultaet as string) || undefined,
     facultyNumber: typeof raw.fakultat_nr === 'number' ? raw.fakultat_nr : undefined,
     title: (raw.kategorie_basis as string) || (raw.status as string) || undefined,
-    avgOverall: typeof raw.avgOverall === 'number' ? raw.avgOverall : undefined,
-    reviewCount: typeof raw.anzahl === 'number' ? raw.anzahl : undefined,
+  };
+}
+
+async function attachRealReviewStats(
+  uni: UniversitySlug,
+  professors: Professor[],
+): Promise<Professor[]> {
+  const reviews = await listReviewsByUni(uni);
+  if (reviews.length === 0) {
+    return professors.map(({ avgOverall, reviewCount, ...prof }) => prof);
+  }
+
+  const byProfessor = new Map<string, { sum: number; count: number }>();
+  for (const review of reviews) {
+    const current = byProfessor.get(review.professorId) ?? { sum: 0, count: 0 };
+    current.sum += review.ratings.insgesamt;
+    current.count += 1;
+    byProfessor.set(review.professorId, current);
+  }
+
+  return professors.map(({ avgOverall, reviewCount, ...prof }) => {
+    const stats = byProfessor.get(prof.id);
+    if (!stats || stats.count === 0) return prof;
+    return {
+      ...prof,
+      avgOverall: stats.sum / stats.count,
+      reviewCount: stats.count,
+    };
+  });
+}
+
+async function attachRealReviewStatsForProfessor(professor: Professor): Promise<Professor> {
+  const reviews = await listReviewsForProfessor(professor.uni, professor.id);
+  const stats = aggregate(reviews);
+  const { avgOverall, reviewCount, ...prof } = professor;
+  if (!stats) return prof;
+  return {
+    ...prof,
+    avgOverall: stats.insgesamt,
+    reviewCount: stats.count,
   };
 }
 
@@ -74,7 +113,7 @@ export async function listProfessorsByUni(uniSlug: UniversitySlug): Promise<Prof
   }
   if (uniSlug === 'tum' && all.length === 0) return listTumProfessors();
   all.sort((a, b) => a.name.localeCompare(b.name, 'de'));
-  return all;
+  return attachRealReviewStats(uniSlug, all);
 }
 
 export async function getProfessor(uniSlug: UniversitySlug, slug: string): Promise<Professor | null> {
@@ -108,7 +147,7 @@ export async function getProfessorById(uniSlug: UniversitySlug, id: string): Pro
   try {
     const res = await wix.items.query(collection).eq('_id', id).limit(1).find();
     const raw = res.items?.[0] as Record<string, unknown> | undefined;
-    if (raw) return normalizeProf(uniSlug, raw);
+    if (raw) return attachRealReviewStatsForProfessor(normalizeProf(uniSlug, raw));
     if (uniSlug === 'tum') return listTumProfessors().find((p) => p.id === id) ?? null;
     return null;
   } catch {

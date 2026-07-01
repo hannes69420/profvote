@@ -144,7 +144,7 @@ function CompareBars({
     { key: 'skript', label: 'Skript' },
     { key: 'klausur', label: 'Klausur' },
     { key: 'organisation', label: 'Organisation' },
-    { key: 'schwierigkeit', label: 'Schwierigkeit', inverse: true },
+    { key: 'schwierigkeit', label: 'Schwierigkeit' },
   ];
   return (
     <div className="card space-y-5">
@@ -162,7 +162,7 @@ function CompareBars({
             </div>
             <div className="min-w-[6.5rem] text-center text-xs text-ink-muted sm:min-w-[10rem]">
               {label}
-              {inverse && <div className="text-[10px] opacity-70">niedrig = leicht</div>}
+              {key === 'schwierigkeit' && <div className="text-[10px] opacity-70">1 schwer · 5 leicht</div>}
             </div>
             <div className="text-left">
               <span className={`tabular-nums ${bWins ? 'font-semibold text-ink-soft' : 'text-ink-muted'}`}>
