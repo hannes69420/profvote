@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import {
   hasVerifiedEmailForUni,
-  hasVerifiedReviewForProfessor,
   isAllowedEmail,
   submitReview,
 } from '@app/lib/profvote/submit';
@@ -130,13 +129,6 @@ export async function POST(req: Request) {
   const prof = await getProfessorById(uni, body.professorId);
   if (!prof) {
     return NextResponse.json({ error: 'Professor nicht gefunden' }, { status: 404 });
-  }
-
-  if (await hasVerifiedReviewForProfessor(uni, body.professorId, email)) {
-    return NextResponse.json(
-      { error: 'Du hast diesen Professor mit dieser E-Mail bereits bewertet.' },
-      { status: 409 },
-    );
   }
 
   let reviewId: string;

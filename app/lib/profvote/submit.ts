@@ -67,12 +67,6 @@ export interface SubmitResult {
   alreadyVerified: boolean;
 }
 
-function getProfessorIdField(uni: UniversitySlug) {
-  if (uni === 'stuttgart') return 'professorID';
-  if (uni === 'kit') return 'professorenidkit';
-  return 'professorId';
-}
-
 export async function hasVerifiedEmailForUni(uni: UniversitySlug, email: string): Promise<boolean> {
   const collection = REVIEW_COLLECTION[uni];
   if (!collection) return false;
@@ -81,27 +75,6 @@ export async function hasVerifiedEmailForUni(uni: UniversitySlug, email: string)
   const wix = getAdminClient();
   const res = await wix.items
     .query(collection)
-    .eq('userEmail', normalizedEmail)
-    .eq('verified', true)
-    .limit(1)
-    .find();
-
-  return (res.items?.length ?? 0) > 0;
-}
-
-export async function hasVerifiedReviewForProfessor(
-  uni: UniversitySlug,
-  professorId: string,
-  email: string,
-): Promise<boolean> {
-  const collection = REVIEW_COLLECTION[uni];
-  if (!collection) return false;
-
-  const normalizedEmail = email.trim().toLowerCase();
-  const wix = getAdminClient();
-  const res = await wix.items
-    .query(collection)
-    .eq(getProfessorIdField(uni), professorId)
     .eq('userEmail', normalizedEmail)
     .eq('verified', true)
     .limit(1)
