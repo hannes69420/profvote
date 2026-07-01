@@ -32,6 +32,7 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
   const [comment, setComment] = useState('');
   const [email, setEmail] = useState('');
   const [savedEmail, setSavedEmail] = useState<string | null>(null);
+  const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const [alreadyVerified, setAlreadyVerified] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -49,8 +50,33 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
     }
   }, []);
 
-  function forgetEmail() {
+  useEffect(() => {
+    let cancelled = false;
+    async function loadSession() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (
+          !cancelled &&
+          data.authenticated &&
+          data.uni === uni &&
+          typeof data.email === 'string'
+        ) {
+          setSessionEmail(data.email);
+          setEmail(data.email);
+        }
+      } catch {
+        // Session check is only a convenience.
+      }
+    }
+    loadSession();
+    return () => { cancelled = true; };
+  }, [uni]);
+
+  async function forgetEmail() {
+    try { await fetch('/api/auth/logout', { method: 'POST' }); } catch { /* ignore */ }
     try { localStorage.removeItem(LS_KEY); } catch { /* ignore */ }
+    setSessionEmail(null);
     setSavedEmail(null);
     setEmail('');
   }
@@ -161,7 +187,25 @@ export function ReviewForm({ uni, professorId, allowedDomains }: Props) {
       <div className="card">
         <label className="block text-sm font-medium text-ink-soft">Uni-Email</label>
 
-        {savedEmail && email === savedEmail ? (
+        {sessionEmail ? (
+          <div className="mt-2 flex flex-col gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 dark:border-green-800 dark:bg-green-950 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-green-800 dark:text-green-300">
+                Bestätigt als
+              </div>
+              <div className="break-words text-sm text-green-700 dark:text-green-300">
+                {sessionEmail}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={forgetEmail}
+              className="self-start text-xs text-ink-muted underline hover:text-rose-500 sm:self-center"
+            >
+              Andere E-Mail verwenden
+            </button>
+          </div>
+        ) : savedEmail && email === savedEmail ? (
           /* Saved email banner */
           <div className="mt-2 flex items-center justify-between rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 dark:bg-green-950 dark:border-green-800">
             <div className="flex items-center gap-2">

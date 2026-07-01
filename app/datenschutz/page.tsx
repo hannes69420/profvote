@@ -55,16 +55,16 @@ export default function DatenschutzPage() {
               erhoben, um die Zugehörigkeit zur jeweiligen Hochschule zu bestätigen.
               Nach erfolgreicher Verifizierung per Bestätigungslink wird die E-Mail-Adresse
               intern für Missbrauchsschutz und Moderationszwecke gespeichert und nicht
-              öffentlich angezeigt. Passwörter oder Nutzerkonten werden nicht angelegt.
+              öffentlich angezeigt. Passwörter oder klassische Nutzerkonten werden nicht angelegt.
               Bei späteren Bewertungen prüfen wir, ob diese E-Mail-Adresse bereits
               erfolgreich verifiziert wurde, damit nicht jedes Mal erneut eine
               Bestätigungs-Mail erforderlich ist.
             </p>
             <p className="mt-2">
-              Für Ihren Komfort wird Ihre E-Mail-Adresse nach erfolgreicher Abgabe
-              zusätzlich <strong>lokal in Ihrem Browser gespeichert</strong> (localStorage),
-              sodass Sie diese bei einer weiteren Bewertung nicht erneut eingeben müssen.
-              Diese lokale Speicherung verlässt Ihren Browser nicht (siehe Abschnitt 4b).
+              Nach erfolgreicher Verifizierung kann zusätzlich ein technisch notwendiges,
+              signiertes Session-Cookie gesetzt werden. Dadurch kann ProfVote bei
+              späteren Besuchen erkennen, dass diese E-Mail-Adresse bereits bestätigt
+              wurde, ohne dass Sie diese erneut eingeben müssen.
             </p>
             <p className="mt-2">
               Zwecke: Verifizierung der Hochschulzugehörigkeit, Verhinderung von Missbrauch,
@@ -103,8 +103,9 @@ export default function DatenschutzPage() {
           <p>
             Unsere Website verwendet technisch notwendige Cookies und ähnliche
             Speichertechnologien (localStorage) zur Sicherstellung der Funktionalität,
-            Sicherheit und zur Speicherung Ihrer Cookie-Einwilligung. Passwörter oder
-            Nutzerkonten werden nicht per Cookie oder localStorage verwaltet.
+            Sicherheit, zur Speicherung Ihrer Cookie-Einwilligung und zur Wiedererkennung
+            einer bereits bestätigten Universitäts-E-Mail-Adresse. Passwörter werden
+            nicht per Cookie oder localStorage gespeichert.
           </p>
           <p className="mt-2">
             Technisch notwendige Cookies und localStorage-Einträge werden auf Grundlage
@@ -124,7 +125,23 @@ export default function DatenschutzPage() {
             </p>
           </SubSection>
 
-          <SubSection title="b) E-Mail-Erinnerung (localStorage)">
+          <SubSection title="b) Bestätigte E-Mail-Session">
+            <p>
+              Nach erfolgreicher E-Mail-Bestätigung speichern wir ein signiertes,
+              technisch notwendiges Session-Cookie ({' '}
+              <code className="rounded bg-neutral-100 px-1 text-xs dark:bg-neutral-800">profvote_session</code>
+              ). Dieses Cookie enthält die bestätigte E-Mail-Adresse, die zugehörige
+              Universität und eine Ablaufzeit. Es ist serverseitig signiert, damit die
+              E-Mail-Adresse nicht einfach im Browser gefälscht werden kann.
+            </p>
+            <p className="mt-2">
+              Zweck ist die komfortable und missbrauchsarme Abgabe weiterer Bewertungen
+              ohne erneute E-Mail-Eingabe. Sie können diese Session im Bewertungsformular
+              über „Andere E-Mail verwenden" beenden.
+            </p>
+          </SubSection>
+
+          <SubSection title="c) E-Mail-Erinnerung (localStorage)">
             <p>
               Nach erfolgreicher Abgabe einer Bewertung speichern wir Ihre
               Universitäts-E-Mail-Adresse im lokalen Speicher Ihres Browsers

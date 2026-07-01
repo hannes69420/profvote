@@ -67,6 +67,12 @@ export interface SubmitResult {
   alreadyVerified: boolean;
 }
 
+function getProfessorIdField(uni: UniversitySlug) {
+  if (uni === 'stuttgart') return 'professorID';
+  if (uni === 'kit') return 'professorenidkit';
+  return 'professorId';
+}
+
 export async function hasVerifiedEmailForUni(uni: UniversitySlug, email: string): Promise<boolean> {
   const collection = REVIEW_COLLECTION[uni];
   if (!collection) return false;
@@ -75,6 +81,27 @@ export async function hasVerifiedEmailForUni(uni: UniversitySlug, email: string)
   const wix = getAdminClient();
   const res = await wix.items
     .query(collection)
+    .eq('userEmail', normalizedEmail)
+    .eq('verified', true)
+    .limit(1)
+    .find();
+
+  return (res.items?.length ?? 0) > 0;
+}
+
+export async function hasVerifiedReviewForProfessor(
+  uni: UniversitySlug,
+  professorId: string,
+  email: string,
+): Promise<boolean> {
+  const collection = REVIEW_COLLECTION[uni];
+  if (!collection) return false;
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const wix = getAdminClient();
+  const res = await wix.items
+    .query(collection)
+    .eq(getProfessorIdField(uni), professorId)
     .eq('userEmail', normalizedEmail)
     .eq('verified', true)
     .limit(1)
@@ -108,18 +135,19 @@ export async function confirmReview(
   uni: UniversitySlug,
   reviewId: string,
   token: string,
-): Promise<boolean> {
+): Promise<{ ok: boolean; email?: string }> {
   const collection = REVIEW_COLLECTION[uni];
-  if (!collection) return false;
+  if (!collection) return { ok: false };
   const wix = getAdminClient();
   const existing = (await wix.items.get(collection, reviewId)) as Record<string, unknown> | null;
-  if (!existing || existing.verificationToken !== token) return false;
-  if (existing.verified === true) return true;
+  if (!existing || existing.verificationToken !== token) return { ok: false };
+  const email = typeof existing.userEmail === 'string' ? existing.userEmail : undefined;
+  if (existing.verified === true) return { ok: true, email };
   const update: MutableWixDataItem = {
     ...existing,
     _id: reviewId,
     verified: true,
   };
   await wix.items.update(collection, update);
-  return true;
+  return { ok: true, email };
 }

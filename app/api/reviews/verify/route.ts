@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { confirmReview } from '@app/lib/profvote/submit';
+import { createVerifiedEmailSession, getSessionCookieOptions, SESSION_COOKIE } from '@app/lib/profvote/session';
 import { UNI_CONFIG } from '@app/lib/profvote/universities';
 import type { UniversitySlug } from '@app/lib/profvote/types';
 
@@ -17,10 +18,18 @@ export async function GET(req: Request) {
     return NextResponse.redirect(`${base}/bewerten/bestaetigt?status=invalid`);
   }
   try {
-    const ok = await confirmReview(uni, id, token);
-    return NextResponse.redirect(
-      `${base}/bewerten/bestaetigt?status=${ok ? 'ok' : 'invalid'}`,
+    const result = await confirmReview(uni, id, token);
+    const res = NextResponse.redirect(
+      `${base}/bewerten/bestaetigt?status=${result.ok ? 'ok' : 'invalid'}`,
     );
+    if (result.ok && result.email) {
+      res.cookies.set(
+        SESSION_COOKIE,
+        createVerifiedEmailSession(result.email, uni),
+        getSessionCookieOptions(),
+      );
+    }
+    return res;
   } catch (e) {
     console.error('verify failed', e);
     return NextResponse.redirect(`${base}/bewerten/bestaetigt?status=error`);

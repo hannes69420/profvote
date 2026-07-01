@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
-import { hasVerifiedEmailForUni, isAllowedEmail, submitReview } from '@app/lib/profvote/submit';
+import {
+  hasVerifiedEmailForUni,
+  hasVerifiedReviewForProfessor,
+  isAllowedEmail,
+  submitReview,
+} from '@app/lib/profvote/submit';
+import { readVerifiedEmailSession, SESSION_COOKIE } from '@app/lib/profvote/session';
 import { sendVerificationEmail } from '@app/lib/profvote/email';
 import { getProfessorById } from '@app/lib/profvote/professors';
 import { UNI_CONFIG } from '@app/lib/profvote/universities';
@@ -88,7 +94,17 @@ export async function POST(req: Request) {
   if (!body.professorId) {
     return NextResponse.json({ error: 'professorId fehlt' }, { status: 400 });
   }
-  if (!body.email || !isAllowedEmail(uni, body.email)) {
+  const session = readVerifiedEmailSession(req.headers.get('cookie')
+    ?.split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${SESSION_COOKIE}=`))
+    ?.slice(SESSION_COOKIE.length + 1));
+  const sessionEmail = session && session.uni === uni && isAllowedEmail(uni, session.email)
+    ? session.email
+    : null;
+  const email = (sessionEmail || body.email || '').trim().toLowerCase();
+
+  if (!email || !isAllowedEmail(uni, email)) {
     return NextResponse.json(
       {
         error: `Bitte eine Uni-Email-Adresse benutzen (${UNI_CONFIG[uni].emailDomains.join(
@@ -116,15 +132,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Professor nicht gefunden' }, { status: 404 });
   }
 
+  if (await hasVerifiedReviewForProfessor(uni, body.professorId, email)) {
+    return NextResponse.json(
+      { error: 'Du hast diesen Professor mit dieser E-Mail bereits bewertet.' },
+      { status: 409 },
+    );
+  }
+
   let reviewId: string;
   let token: string;
   let alreadyVerified = false;
   try {
-    alreadyVerified = await hasVerifiedEmailForUni(uni, body.email);
+    alreadyVerified = Boolean(sessionEmail) || await hasVerifiedEmailForUni(uni, email);
     ({ reviewId, token, alreadyVerified } = await submitReview({
       uni,
       professorId: body.professorId,
-      email: body.email,
+      email,
       ratings,
       comment: body.comment,
     }, { skipEmailVerification: alreadyVerified }));
@@ -144,7 +167,7 @@ export async function POST(req: Request) {
     )}&uni=${uni}&token=${encodeURIComponent(token)}`;
 
     await sendVerificationEmail({
-      to: body.email,
+      to: email,
       professorName: prof.name,
       verifyUrl,
     });
